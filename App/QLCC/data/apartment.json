@@ -1,0 +1,58 @@
+[
+  {
+    "id": 1,
+    "name": 101,
+    "price": 3500000,
+    "acreage": 25,
+    "capacity": 3
+  },
+  {
+    "id": 2,
+    "name": 102,
+    "price": 3600000,
+    "acreage": 26,
+    "capacity": 3
+  },
+  {
+    "id": 3,
+    "name": 103,
+    "price": 3800000,
+    "acreage": 28,
+    "capacity": 4
+  },
+  {
+    "id": 4,
+    "name": 104,
+    "price": 4000000,
+    "acreage": 30,
+    "capacity": 4
+  },
+  {
+    "id": 5,
+    "name": 201,
+    "price": 4200000,
+    "acreage": 32,
+    "capacity": 4
+  },
+  {
+    "id": 6,
+    "name": 202,
+    "price": 4500000,
+    "acreage": 35,
+    "capacity": 5
+  },
+  {
+    "id": 7,
+    "name": 302,
+    "price": 4700000,
+    "acreage": 36,
+    "capacity": 5
+  },
+  {
+    "id": 8,
+    "name": 304,
+    "price": 5000000,
+    "acreage": 40,
+    "capacity": 6
+  }
+]

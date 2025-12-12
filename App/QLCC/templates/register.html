@@ -1,0 +1,45 @@
+{%extends 'layout/base.html'%}
+
+{%block title%}
+Trang dang ky
+{%endblock%}
+
+{%block content%}
+<h3 class="text-info text-center mt3">Trang dang ky</h3>
+
+{%if err_msg%}
+<div class="alert alert-danger">
+    {{err_msg}}
+</div>
+{%endif%}
+
+<form method="post", enctype="multipart/form-data">
+    <div class="form-floating mb-3 mt-3">
+        <input type="text" class="form-control" id="name" placeholder="Nhap ho va ten" name="name">
+        <label for="name">Nhap ho va ten</label>
+    </div>
+    <div class="form-floating mb-3 mt-3">
+        <input type="text" class="form-control" id="username" placeholder="Nhap tai khoan" name="username">
+        <label for="username">Nhap tai khoan</label>
+    </div>
+
+    <div class="form-floating mt-3 mb-3">
+        <input type="password" class="form-control" id="password" placeholder="Nhap mat khau" name="password">
+        <label for="password">Nhap mat khau</label>
+    </div>
+    <div class="form-floating mt-3 mb-3">
+        <input type="password" class="form-control" id="confirm" placeholder="Nhap lai   mat khau" name="confirm">
+        <label for="confirm">Nhap lai mat khau</label>
+    </div>
+    <div class="form-floating mt-3 mb-3">
+        <input type="file" class="form-control" id="avatar" placeholder="Anh dai dien" name="avatar">
+        <label for="avatar">Anh dai dien</label>
+    </div>
+    <div class="form-floating mt-3 mb-3">
+    <button class="btn btn-info" type="submit">
+        Dang ky
+    </button>
+</div>
+</form>
+
+{%endblock%}

@@ -23,3 +23,18 @@ body{
   flex: 0 0 33.333%; /* mỗi item chiếm 1/3 chiều rộng */
   display: block;
 }
+
+#apartmentCarousel .carousel-control-prev,
+#apartmentCarousel .carousel-control-next {
+  width: 5%;              /* thu nhỏ vùng click */
+  top: 50%;               /* căn giữa theo chiều dọc */
+  transform: translateY(-50%);
+}
+
+#apartmentCarousel .carousel-control-prev {
+  left: -60px;            /* đẩy nút Prev ra ngoài khung */
+}
+
+#apartmentCarousel .carousel-control-next {
+  right: -60px;           /* đẩy nút Next ra ngoài khung */
+}
