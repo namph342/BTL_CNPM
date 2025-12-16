@@ -3,7 +3,7 @@
 }
 
 body{
-    background-color: lightblue
+    background-color: white
 }
 
 .image-intro{
@@ -14,15 +14,6 @@ body{
     background-position: center;
 }
 
-
-/* Hiển thị 3 item cùng lúc */
-#apartmentCarousel1 .carousel-inner {
-  display: flex;
-}
-#apartmentCarousel1 .carousel-item {
-  flex: 0 0 33.333%; /* mỗi item chiếm 1/3 chiều rộng */
-  display: block;
-}
 
 #apartmentCarousel .carousel-control-prev,
 #apartmentCarousel .carousel-control-next {

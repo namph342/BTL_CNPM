@@ -1,11 +1,18 @@
 from flask import render_template
 
-from QLCC import app
+from QLCC import app, dao
 
+def chunk_list(data, size):
+    result = []
+    for i in range(0, len(data), size):
+        result.append(data[i:i + size])
+    return result
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    p = dao.load_apartment_details()
+    slides = chunk_list(p, 3)
+    return render_template('index.html',p=p, slides=slides)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login_account():
@@ -14,8 +21,6 @@ def login_account():
 @app.route('/register', methods=['GET', 'POST'])
 def register_account():
     return render_template('register.html')
-
-
 
 if __name__ == "__main__":
     with app.app_context():

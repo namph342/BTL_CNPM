@@ -1,10 +1,10 @@
 import json
 
+from QLCC.models import Apartment
+
 
 def load_apartment_details():
-    with open('apartment_details.json') as json_file:
-        details = json.load(json_file)
-
-
-
-        return details
+    # with open("data/apartment.json", encoding="utf-8") as f:
+    #     details = json.load(f)
+    #     return details
+    return Apartment.query.all()

@@ -5,7 +5,7 @@ Trang dang nhap
 {%endblock%}
 
 {%block content%}
-<h3 class="text-info text-center mt3">Trang dang nhap</h3>
+
 
 {%if err_msg%}
 <div class="alert alert-danger">
@@ -13,21 +13,25 @@ Trang dang nhap
 </div>
 {%endif%}
 
-<form method="post">
-    <div class="form-floating mb-3 mt-3">
-        <input type="text" class="form-control" id="username" placeholder="Nhap tai khoan" name="username">
-        <label for="username">Nhap tai khoan</label>
-    </div>
+<div class="card mx-auto p-4 mt-5  shadow" style="width: 450px">
+    <h4 class="text-dark text-center mt3">TRANG ĐĂNG NHẬP</h4>
+    <p class="text-center">Đăng nhập vào hệ thống</p>
+    <form method="post">
+        <div class="form-floating mb-3 mt-3">
+            <input type="text" class="form-control" id="username" placeholder="Nhap tai khoan" name="username">
+            <label for="username">Nhap tai khoan</label>
+        </div>
 
-    <div class="form-floating mt-3 mb-3">
-        <input type="password" class="form-control" id="password" placeholder="Nhap mat khau" name="password">
-        <label for="password">Nhap mat khau</label>
-    </div>
-    <div class="form-floating mt-3 mb-3">
-    <button class="btn btn-info" type="submit">
-        Dang nhap
-    </button>
+        <div class="form-floating mt-3 mb-3">
+            <input type="password" class="form-control" id="password" placeholder="Nhap mat khau" name="password">
+            <label for="password">Nhap mat khau</label>
+        </div>
+        <div class="form-floating mt-3 mb-3 w-100">
+            <button class="btn btn-info w-100" type="submit">
+                Dang nhap
+            </button>
+        </div>
+    </form>
 </div>
-</form>
 
 {%endblock%}

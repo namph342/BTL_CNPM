@@ -25,7 +25,7 @@ Trang chu
 <div class="introduce container px-4 py-5">
     <h2 class="pb-2 text-center">Dịch vụ của chúng tôi</h2>
 
-  <div class="row py-5">
+    <div class="row py-5">
 
         <div class=" col text-center">
             <div class=" bg-light rounded-circle mx-auto d-flex align-items-center justify-content-center"
@@ -71,82 +71,59 @@ Trang chu
 {%block content%}
 
 <div class="text-center mb-4">
-  <h2>Các căn hộ hiện có</h2>
-  <p>Xem trước các căn hộ mini của chúng tôi. Đăng nhập để xem chi tiết và đặt thuê.</p>
+    <h2>Các căn hộ hiện có</h2>
+    <p>Xem trước các căn hộ mini của chúng tôi. Đăng nhập để xem chi tiết và đặt thuê.</p>
 </div>
+
 
 <div id="apartmentCarousel" class="carousel slide" data-bs-ride="carousel">
-  <div class="carousel-inner">
+    <div class="carousel-inner">
 
-    <!-- Slide 1 -->
-    <div class="carousel-item active">
-      <div class="row">
-        <div class="col-md-4">
-          <div class="card ">
-            <img src="https://res.cloudinary.com/dhmt3nfpz/image/upload/v1765538908/71780effdb9b41822ac43a7a67d68df3_qumwfn.jpg" class="card-img-top" alt="Căn A101">
-            <div class="card-body">
-              <span class="badge bg-success">Còn trống</span>
-              <h5 class="card-title">Căn A101</h5>
-              <p class="card-text">3.500.000 VNĐ/tháng<br>Diện tích: 25m²<br>2-3 người</p>
-              <a href="#" class="btn btn-primary btn-sm">Xem chi tiết</a>
-            </div>
-          </div>
-        </div>
+        {% for slide in slides %}
+        <div class="carousel-item {% if loop.first %}active{% endif %}">
+            <div class="row">
 
-        <div class="col-md-4">
-          <div class="card">
-            <img src="https://res.cloudinary.com/dhmt3nfpz/image/upload/v1765538911/f4723de4180cbef568704747227409c4_geiaot.jpg" class="card-img-top" alt="Căn A102">
-            <div class="card-body">
-              <span class="badge bg-success">Còn trống</span>
-              <h5 class="card-title">Căn A102</h5>
-              <p class="card-text">4.000.000 VNĐ/tháng<br>Diện tích: 30m²<br>3-4 người</p>
-              <a href="#" class="btn btn-primary btn-sm">Xem chi tiết</a>
-            </div>
-          </div>
-        </div>
+                {% for i in slide %}
+                <div class="col-12 col-md-4 mb-4">
+                    <div class="card rounded-5 overflow-hidden h-100">
 
-        <div class="col-md-4 ">
-          <div class="card">
-            <img src="https://res.cloudinary.com/dhmt3nfpz/image/upload/v1765538911/f4723de4180cbef568704747227409c4_geiaot.jpg" class="card-img-top" alt="Căn B201">
-            <div class="card-body">
-              <span class="badge bg-danger">Đã thuê</span>
-              <h5 class="card-title">Căn B201</h5>
-              <p class="card-text">3.800.000 VNĐ/tháng<br>Diện tích: 28m²<br>2-4 người</p>
-              <a href="#" class="btn btn-primary btn-sm rounded-2">Xem chi tiết</a>
+                        <img src="{{ i.image }}" class="card-img-top">
+
+                        <div class="card-body">
+                            <span class="badge
+                                {% if i.status == 'Còn trống' %}bg-success{% else %}bg-danger{% endif %}">
+                                {{ i.status }}
+                            </span>
+
+                            <h5 class="mt-2">Căn {{ i.name }}</h5>
+                            <p>
+                                {{ i.price }} VNĐ/tháng<br>
+                                {{ i.acreage }} m² · {{ i.capacity }} người
+                            </p>
+
+                            <a class="btn btn-primary btn-sm">Xem chi tiết</a>
+                        </div>
+
+                    </div>
+                </div>
+                {% endfor %}
+
             </div>
-          </div>
         </div>
-      </div>
+        {% endfor %}
+
     </div>
 
-    <!-- Slide 2 (thêm các căn khác) -->
-    <div class="carousel-item">
-      <div class="row">
-        <!-- 3 thẻ khác -->
-          <div class="col-md-4">
-          <div class="card ">
-            <img src="https://res.cloudinary.com/dhmt3nfpz/image/upload/v1765538908/71780effdb9b41822ac43a7a67d68df3_qumwfn.jpg" class="card-img-top" alt="Căn A101">
-            <div class="card-body">
-              <span class="badge bg-success">Còn trống</span>
-              <h5 class="card-title">Căn A101</h5>
-              <p class="card-text">3.500.000 VNĐ/tháng<br>Diện tích: 25m²<br>2-3 người</p>
-              <a href="#" class="btn btn-primary btn-sm">Xem chi tiết</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Controls -->
-  <button class="carousel-control-prev" type="button" data-bs-target="#apartmentCarousel" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon"></span>
-  </button>
-  <button class="carousel-control-next" type="button" data-bs-target="#apartmentCarousel" data-bs-slide="next">
-    <span class="carousel-control-next-icon"></span>
-  </button>
+    <button class="carousel-control-prev" type="button"
+            data-bs-target="#apartmentCarousel" data-bs-slide="prev">
+        <i class="bi bi-chevron-left fs-2 text-dark"></i>
+    </button>
+    <button class="carousel-control-next" type="button"
+            data-bs-target="#apartmentCarousel" data-bs-slide="next">
+        <i class="bi bi-chevron-right fs-2 text-dark"></i>
+    </button>
 </div>
+
 
 {%endblock%}
 
