@@ -7,15 +7,16 @@ Trang dang ky
 {%block content%}
 
 
-{%if err_msg%}
-<div class="alert alert-danger">
-    {{err_msg}}
-</div>
-{%endif%}
+
 
 <form method="post" enctype="multipart/form-data" class="card mx-auto p-4 mt-5" style="width: 450px">
     <h3 class="text-dark text-center mt3">Trang dang ky</h3>
     <p class="text-center">Dang ky tai khoan moi</p>
+    {%if err_msg%}
+<div class="alert alert-danger">
+    {{err_msg}}
+</div>
+{%endif%}
     <div class="form-floating mb-3 mt-3 ">
         <input type="text" class="form-control request" id="name" placeholder="Nhap ho va ten" name="name">
         <label for="name">Nhap ho va ten</label>
@@ -39,7 +40,7 @@ Trang dang ky
         <label for="password">Nhap mat khau</label>
     </div>
     <div class="form-floating mt-3 mb-3">
-        <input type="password" class="form-control" id="confirm" placeholder="Nhap lai   mat khau" name="confirm">
+        <input type="password" class="form-control" id="confirm" placeholder="Nhap lai   mat khau" name="confirm" required minlength="6">
         <label for="confirm">Nhap lai mat khau</label>
     </div>
     <div class="form-floating mt-3 mb-3">

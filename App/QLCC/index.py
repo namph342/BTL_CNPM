@@ -1,10 +1,9 @@
-from flask import render_template, request, redirect, url_for, session
+from flask import render_template, request, redirect, url_for, session, flash
 from flask_login import login_user, current_user, logout_user
 from QLCC import models
-
 from QLCC import app, dao, db, login_manager
 from QLCC.models import UserRole
-
+import cloudinary.uploader
 
 def chunk_list(data, size):
     result = []
@@ -48,7 +47,31 @@ def login_account():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register_account():
-    return render_template('register.html')
+    err_msg = None
+
+    if (request.method == "POST"):
+        password = request.form.get("password")
+        confirm = request.form.get("confirm")
+        if password != confirm:
+            err_msg = "Mat khau khong khop"
+        else:
+            name = request.form.get("name")
+            username = request.form.get("username")
+            avatar = request.files.get("avatar")
+            email = request.form.get("email")
+            phonenumber = request.form.get("phonenumber")
+            file_path = None
+            if avatar:
+                res = cloudinary.uploader.upload(avatar)
+                file_path = res["secure_url"]
+            try:
+                flash("Đăng ký thành công! Vui lòng đăng nhập.", "success")
+                dao.add_user(name, username, password, file_path, email, phonenumber)
+                return redirect("/login")
+            except:
+                db.session.rollback()
+                err_msg = "loi he thong"
+    return render_template('register.html', err_msg=err_msg)
 
 @app.route("/logout")
 def logout_account():
