@@ -22,7 +22,7 @@ Trang chu
 
 {%block introduce%}
 
-<div class="introduce container px-4 py-5">
+<div class="introduce container px-4 py-5"style="width:1250px">
     <h2 class="pb-2 text-center">Dịch vụ của chúng tôi</h2>
 
     <div class="row py-5">
@@ -76,42 +76,34 @@ Trang chu
 </div>
 
 
-<div id="apartmentCarousel" class="carousel slide" data-bs-ride="carousel">
+<div id="apartmentCarousel" class="carousel slide mx-auto" data-bs-ride="carousel" style="width:1100px">
     <div class="carousel-inner">
-
         {% for slide in slides %}
         <div class="carousel-item {% if loop.first %}active{% endif %}">
             <div class="row">
-
                 {% for i in slide %}
                 <div class="col-12 col-md-4 mb-4">
                     <div class="card rounded-5 overflow-hidden h-100">
-
                         <img src="{{ i.image }}" class="card-img-top">
-
                         <div class="card-body">
                             <span class="badge
                                 {% if i.status == 'Còn trống' %}bg-success{% else %}bg-danger{% endif %}">
                                 {{ i.status }}
                             </span>
-
                             <h5 class="mt-2">Căn {{ i.name }}</h5>
                             <p>
-                                {{ i.price }} VNĐ/tháng<br>
-                                {{ i.acreage }} m² · {{ i.capacity }} người
+                                {{"{:,.0f}".format(i.price)}} VNĐ/tháng<br>
+                                Diện tích: {{ i.acreage }} m² <br>
+                                Tối đa: {{ i.capacity }} người
                             </p>
-
-                            <a class="btn btn-primary btn-sm">Xem chi tiết</a>
+                            <a class="btn btn-primary btn-sm" href="/apartment/{{i.id}}">Xem chi tiết</a>
                         </div>
-
                     </div>
                 </div>
                 {% endfor %}
-
             </div>
         </div>
         {% endfor %}
-
     </div>
 
     <button class="carousel-control-prev" type="button"

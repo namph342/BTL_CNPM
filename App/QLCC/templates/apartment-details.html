@@ -1,0 +1,19 @@
+{%extends 'layout/base.html'%}
+
+{%block title%}
+Trang chu
+{%endblock%}
+
+{%block content%}
+<div class="row mt-3">
+    <div class="col-md-5 col-12">
+        <img src="{{apt.image}}" class="img-fluid">
+    </div>
+    <div class="col-md-7 col-12">
+        <h3 class="text-info">Căn số {{apt.name}}</h3>
+        <h4 class="text-danger"> Giá: {{"{:,.0f}".format(apt.price)}} VNĐ/tháng</h4>
+        <h4>Diện tích: {{ apt.acreage }} m²</h4>
+        <h4>Tối đa: {{ apt.capacity }} người</h4>
+    </div>
+</div>
+{%endblock%}

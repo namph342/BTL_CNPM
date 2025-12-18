@@ -1,10 +1,26 @@
+import hashlib
 import json
 
-from QLCC.models import Apartment
+from QLCC import app
+from QLCC.models import Canho, User
 
 
 def load_apartment_details():
-    # with open("data/apartment.json", encoding="utf-8") as f:
+    # with open("data/canho.json", encoding="utf-8") as f:
     #     details = json.load(f)
     #     return details
-    return Apartment.query.all()
+    return Canho.query.all()
+
+def auth_user(username, password):
+    password = hashlib.md5(password.encode("utf-8")).hexdigest()
+    return User.query.filter(User.username==username, User.password==password).first()
+
+def get_user_by_id(id):
+    return User.query.get(id)
+
+def load_apartment_by_id(id):
+    return Canho.query.get(id)
+
+if __name__ == "__main__":
+    with app.app_context():
+        print(auth_user("user", "123"))
