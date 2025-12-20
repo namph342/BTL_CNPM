@@ -5,5 +5,10 @@ Trang khach hang
 {%endblock%}
 
 {%block content%}
+{%if current_user.is_authenticated%}
 <h2 class="text text-center">TRANG KHACH HANG</h2>
+{%else%}
+ban chua dang nhap
+{%endif%}
+
 {%endblock%}

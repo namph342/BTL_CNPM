@@ -83,8 +83,8 @@ if __name__ == '__main__':
 
         import hashlib
         password = hashlib.md5("123".encode('utf-8')).hexdigest()
-        u1=User(name="user", username='user', password=password)
-        u2 = User(name="admin", username='admin', password=password, role=UserRole.ADMIN)
+        u1=User(name="client", username='client', password=password)
+        u2 = User(name="management", username='management', password=password, role=UserRole.ADMIN)
         u3 = User(name="security", username='security', password=password, role=UserRole.SECURITY)
         db.session.add_all([u1, u2, u3])
         db.session.commit()

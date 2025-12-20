@@ -1,0 +1,79 @@
+{%extends 'layout/base.html'%}
+
+{%block title%}
+Trang quan ly
+{%endblock%}
+
+{%block content%}
+
+{%if current_user.is_authenticated%}
+
+{%if current_user.role == UserRole.ADMIN%}
+<h2 class="text text-center">TRANG QUAN LY</h2>
+
+<div class="container mt-3">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs border rounded" id="myTab" role="tablist">
+        <li class="nav-item  rounded" role="presentation">
+            <button class="nav-link active" id="tongquan-tab" data-bs-toggle="tab" data-bs-target="#tongquan"
+                    type="button" role="tab">Tổng quan
+            </button>
+        </li>
+        <li class="nav-item  rounded" role="presentation">
+            <button class="nav-link" id="phong-tab" data-bs-toggle="tab" data-bs-target="#phong" type="button"
+                    role="tab">Quản lý phòng
+            </button>
+        </li>
+        <li class="nav-item  rounded" role="presentation">
+            <button class="nav-link" id="hopdong-tab" data-bs-toggle="tab" data-bs-target="#hopdong" type="button"
+                    role="tab">Hợp đồng
+            </button>
+        </li>
+        <li class="nav-item  rounded" role="presentation">
+            <button class="nav-link" id="hoadon-tab" data-bs-toggle="tab" data-bs-target="#hoadon" type="button"
+                    role="tab">Hóa đơn
+            </button>
+        </li>
+        <li class="nav-item  rounded" role="presentation">
+            <button class="nav-link" id="cai-dat-tab" data-bs-toggle="tab" data-bs-target="#cai-dat" type="button"
+                    role="tab">Cài đặt
+            </button>
+        </li>
+    </ul>
+
+    <!-- Tab content -->
+    <div class="tab-content mt-3">
+        <div class="tab-pane fade show active" id="tongquan" role="tabpanel">
+            {% include 'management/tongquan.html' %}
+        </div>
+        <div class="tab-pane fade" id="phong" role="tabpanel">
+            <h3>Quản lý phòng</h3>
+            <p>Nội dung quản lý phòng.</p>
+        </div>
+        <div class="tab-pane fade" id="hopdong" role="tabpanel">
+            <h3>Hợp đồng</h3>
+            <p>Nội dung hợp đồng.</p>
+        </div>
+        <div class="tab-pane fade" id="hoadon" role="tabpanel">
+            <h3>Hóa đơn</h3>
+            <p>Nội dung hóa đơn.</p>
+        </div>
+        <div class="tab-pane fade" id="cai-dat" role="tabpanel">
+            <h3>Cài đặt</h3>
+            <p>Nội dung cài đặt.</p>
+        </div>
+    </div>
+</div>
+{%else%}
+<h1 class="text text-info text-center"> Ban khong co quyen truy cap trang nay</h1>
+<div>
+    vui long tro ve
+    <a href="/">trang chu</a>
+</div>
+{%endif%}
+
+{%else%}
+<h1 class="text text-info text-center"> Vui long dang nhap truoc de thao tac</h1>
+{%endif%}
+
+{%endblock%}

@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for, session, flash
 from flask_login import login_user, current_user, logout_user
 from QLCC import models
 from QLCC import app, dao, db, login_manager
-from QLCC.models import UserRole
+from QLCC.models import UserRole, UserRole
 import cloudinary.uploader
 
 def chunk_list(data, size):
@@ -85,7 +85,8 @@ def apartment_details(id):
 
 @app.route('/management', methods=['GET', 'POST'])
 def management():
-    return render_template('management.html')
+    p = dao.get_user_by_id(1)
+    return render_template('management/management.html', UserRole = UserRole, p=p)
 
 @app.route('/client', methods=['GET', 'POST'])
 def client():
@@ -98,6 +99,8 @@ def security():
 @login_manager.user_loader
 def load_user(user_id):
     return dao.get_user_by_id(user_id)
+
+
 
 if __name__ == "__main__":
     with app.app_context():
