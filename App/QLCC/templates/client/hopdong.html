@@ -1,0 +1,94 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Hợp đồng & Quy định{% endblock %}
+
+{% block navbar %}
+    {% include 'layout/client_navbar.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+
+    <div class="custom-card mb-4">
+        <h5 class="card-title-text">Thông tin hợp đồng</h5>
+
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="info-group">
+                    <label>Số phòng</label>
+                    <div class="value text-dark fw-bold">{{ hopdong.so_phong }}</div>
+                </div>
+                <div class="info-group">
+                    <label>Ngày bắt đầu</label>
+                    <div class="value">{{ hopdong.ngay_bat_dau }}</div>
+                </div>
+                <div class="info-group">
+                    <label>Tiền thuê hàng tháng</label>
+                    <div class="value text-primary fw-bold">{{ hopdong.tien_thue }} đ</div>
+                </div>
+                <div class="info-group">
+                    <label>Số người ở</label>
+                    <div class="value">{{ hopdong.so_nguoi }}</div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="info-group">
+                    <label>Người thuê</label>
+                    <div class="value">{{ hopdong.nguoi_thue }}</div>
+                </div>
+                <div class="info-group">
+                    <label>Ngày kết thúc</label>
+                    <div class="value">{{ hopdong.ngay_ket_thuc }}</div>
+                </div>
+                <div class="info-group">
+                    <label>Tiền đặt cọc</label>
+                    <div class="value fw-bold">{{ hopdong.tien_coc }} đ</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="custom-card mb-4">
+        <h5 class="card-title-text">Đơn giá dịch vụ hiện tại</h5>
+        <div class="price-list mt-3">
+
+            <div class="price-row">
+                <span>Giá điện</span>
+                <span class="price-value">{{ giaservice.gia_dien }} đ/kWh</span>
+            </div>
+
+            <div class="price-row">
+                <span>Giá nước</span>
+                <span class="price-value">{{ giaservice.gia_nuoc }} đ/m³</span>
+            </div>
+
+            <div class="price-row">
+                <span>Giá Internet</span>
+                <span class="price-value">{{ giaservice.gia_internet }} đ/tháng</span>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="custom-card">
+        <h5 class="card-title-text">Quy định chung cư</h5>
+        <div class="rules-list mt-3">
+
+            {% for rule in quydinh %}
+            <div class="rule-item">
+                <div class="rule-icon">
+                    <i class="bi {{ rule.icon }}"></i>
+                </div>
+                <div class="rule-content">
+                    <div class="rule-title">{{ rule.tieu_de }}</div>
+                    <div class="rule-desc">{{ rule.noi_dung }}</div>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}

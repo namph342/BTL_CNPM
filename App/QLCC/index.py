@@ -2,7 +2,8 @@ from flask import render_template, request, redirect, url_for, session, flash
 from flask_login import login_user, current_user, logout_user
 from QLCC import models
 from QLCC import app, dao, db, login_manager
-from QLCC.dao import ReportService, get_danh_sach_phong
+from QLCC.dao import ReportService, get_danh_sach_phong, get_danh_sach_hop_dong, get_danh_sach_hoa_don, update_cau_hinh, \
+    get_cau_hinh, get_hop_dong_ca_nhan, get_danh_sach_quy_dinh, get_hoa_don_chi_tiet_client
 from QLCC.models import UserRole, UserRole, Canho, Hopdong, Hoadon, User, Chitiethoadon, Suco
 import cloudinary.uploader
 
@@ -36,9 +37,9 @@ def login_account():
             login_user(user)
             # Chia theo role
             if user.role == UserRole.ADMIN:
-                return redirect("/management")
+                return redirect("/management/tong-quan")
             elif user.role == UserRole.USER:
-                return redirect("/client")
+                return redirect("/client/hop-dong")
             elif user.role == UserRole.SECURITY:
                 return redirect("/security")
 
@@ -84,48 +85,98 @@ def apartment_details(id):
     a=dao.load_apartment_by_id(id)
     return render_template('apartment-details.html', apt=a)
 
-@app.route('/management')
-def management():
-    if not current_user.is_authenticated or current_user.role != UserRole.ADMIN:
-        return redirect(url_for('login_account'))
-
-    dashboard_data = ReportService.get_dashboard_data()
-    print(dashboard_data)
-    return render_template(
-        'management/management.html',
-        p=current_user,
-        UserRole=UserRole,
-
-    )
 
 @app.route('/management/tong-quan')
 def tong_quan():
-    return render_template('/management/tongquan.html', active_page='overview') # active_page để tô màu nút
+    # Logic lấy dữ liệu phải nằm ở đây
+    dashboard_data = ReportService.get_dashboard_data()
+
+    return render_template('/management/tongquan.html',
+                        p=current_user,
+                        UserRole=UserRole,
+                        active_page='overview',
+                        **dashboard_data)
 
 
 @app.route('/management/phong')
 def quanly_phong():
-    danh_sach = get_danh_sach_phong()
-    return render_template('/management/quanlyphong.html',list_phong=danh_sach, active_page='rooms')
-# @app.route('/management/hop-dong')
-# def tong_quan():
-#     return render_template('/management/hoadon.html', active_page='overview') # active_page để tô màu nút
+
+    ds_phong = get_danh_sach_phong()
+
+    return render_template('management/quanlyphong.html',
+                           list_phong=ds_phong,
+                           active_page='rooms')
+@app.route('/management/hop-dong')
+def quanly_hopdong():
+    # Lấy dữ liệu
+    ds_hopdong = get_danh_sach_hop_dong()
+
+    # Render template
+    return render_template('/management/hopdong.html',list_hopdong=ds_hopdong, active_page='contracts')
+
+
+@app.route('/management/hoa-don')
+def quanly_hoadon():
+    ds_hoadon = get_danh_sach_hoa_don()
+
+    return render_template('/management/hoadon.html',
+                           list_hoadon=ds_hoadon,
+                           active_page='billing')
+
+@app.route('/management/cai-dat', methods=['GET', 'POST'])
+def quanly_caidat():
+    # NẾU LÀ POST (Admin bấm nút Lưu)
+    if request.method == 'POST':
+        # Lấy dữ liệu từ ô input có name="..."
+        dien_moi = request.form.get('gia_dien')
+        nuoc_moi = request.form.get('gia_nuoc')
+        net_moi = request.form.get('gia_internet')
+
+        # Gọi DAO để lưu lại
+        update_cau_hinh(dien_moi, nuoc_moi, net_moi)
+
+        # Load lại trang để thấy dữ liệu mới
+        return redirect(url_for('quanly_caidat'))
+
+    # NẾU LÀ GET (Chỉ hiển thị trang)
+    data = get_cau_hinh()
+    return render_template('/management/cai dat.html',
+                           cauhinh=data,
+                           active_page='settings')
+
+@app.route('/client/hop-dong')
+def client_hopdong():
+    # 1. Thông tin hợp đồng
+    contract = get_hop_dong_ca_nhan()
+
+    # 2. Đơn giá dịch vụ (Lấy từ Admin cài đặt)
+    prices = get_cau_hinh()
+
+    # 3. Danh sách quy định
+    rules = get_danh_sach_quy_dinh()
+
+    return render_template('/client/hopdong.html',
+                           hopdong=contract,
+                           giaservice=prices,
+                           quydinh=rules,
+                           active_page='client_contract')
+
+@app.route('/client/hoa-don')
+def client_hoadon():
+    # Lấy dữ liệu chi tiết
+    invoice_data = get_hoa_don_chi_tiet_client()
+
+    return render_template('/client/hoadon_thang.html',
+                           hoadon=invoice_data,
+                           active_page='client_invoice')
+
+# @app.route('/client/lich-su')
+# def client_lichsu():
+#     return render_template('client/lichsu.html', active_page='client_history')
 #
-# @app.route('/management/hoa-don')
-# def tong_quan():
-#     return render_template('/management/caidat.html', active_page='overview') # active_page để tô màu nút
-
-# @app.route('/management/cai-dat')
-# def tong_quan():
-#     return render_template('/management/hopdong.html', active_page='overview') # active_page để tô màu nút
-
-@app.route('/client', methods=['GET', 'POST'])
-def client():
-    return render_template('client.html')
-
-@app.route('/security', methods=['GET', 'POST'])
-def security():
-    return render_template('security.html')
+# @app.route('/client/su-co')
+# def client_suco():
+#     return render_template('client/suco.html', active_page='client_report')
 
 @login_manager.user_loader
 def load_user(user_id):

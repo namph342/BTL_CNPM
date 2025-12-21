@@ -1,12 +1,65 @@
 {% extends 'layout/base.html' %}
 
 {% block title %}
-Trang quản lý
+    Quản lý Hóa đơn
+{% endblock %}
+
+{% block navbar %}
+    {% include 'layout/quanly_navbar.html' %}
 {% endblock %}
 
 {% block content %}
+<div class="container mt-4">
 
-{% include 'layout/quanly_navbar.html' %}
+    <div class="table-container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h5 class="section-title">Quản lý hóa đơn</h5>
+            <button class="btn btn-primary btn-sm">
+                <i class="bi bi-plus-lg"></i> Tạo hóa đơn tháng này
+            </button>
+        </div>
 
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>Mã HĐ</th>
+                    <th>Phòng</th>
+                    <th>Tháng</th>
+                    <th>Tiền điện</th>
+                    <th>Tiền nước</th>
+                    <th>Tiền mạng</th>
+                    <th>Tiền thuê</th>
+                    <th>Tổng</th>
+                    <th>Trạng thái</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for hd in list_hoadon %}
+                <tr>
+                    <td><strong>{{ hd.ma_hd }}</strong></td>
+                    <td><span class="room-badge">{{ hd.phong }}</span></td>
+                    <td>{{ hd.thang }}</td>
+                    <td>{{ hd.tien_dien }} ₫</td>
+                    <td>{{ hd.tien_nuoc }} ₫</td>
+                    <td>{{ hd.tien_mang }} ₫</td>
+                    <td>{{ hd.tien_thue }} ₫</td>
+                    <td style="font-weight: bold; color: #333;">{{ hd.tong_tien }} ₫</td>
 
+                    <td>
+                        {% if hd.trang_thai == 'da_thanh_toan' %}
+                            <span class="status-badge status-paid">
+                                {{ hd.trang_thai_text }}
+                            </span>
+                        {% else %}
+                            <span class="status-badge status-unpaid">
+                                {{ hd.trang_thai_text }}
+                            </span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}

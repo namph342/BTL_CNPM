@@ -1,51 +1,58 @@
 {% extends 'layout/base.html' %}
 
-{% block title %}
-    Quản lý Phòng - Chung cư Mini
+{% block navbar %}
+{% include 'layout/quanly_navbar.html' %}
 {% endblock %}
 
 {% block content %}
-
-{% include 'layout/quanly_navbar.html' %}
-
 <div class="container mt-4">
 
     <div class="table-container">
-        <h4 class="mb-4" style="font-weight: 600; color: #333;">Danh sách phòng</h4>
-
         <table class="custom-table">
             <thead>
-                <tr>
-                    <th>Mã phòng</th>
-                    <th>Trạng thái</th>
-                    <th>Số người</th>
-                    <th>Giá thuê</th>
-                    <th>Hợp đồng đến</th>
-                    <th>Hành động</th> </tr>
+            <tr>
+                <th>STT</th>
+                <th>Mã căn</th>
+                <th>Diện tích</th>
+                <th>Sức chứa</th>
+                <th>Giá thuê</th>
+                <th>Tình trạng</th>
+                <th>Hành động</th>
+            </tr>
             </thead>
             <tbody>
-                {% for phong in list_phong %}
-                <tr>
-                    <td><strong>{{ phong.ma_phong }}</strong></td>
+            {% for p in list_phong %}
+            <tr>
+                <td>{{ loop.index }}</td>
 
-                    <td>
-                        {% if phong.trang_thai == 'Đã thuê' %}
-                            <span class="status-badge status-rented">Đã thuê</span>
-                        {% else %}
-                            <span class="status-badge status-empty">Trống</span>
-                        {% endif %}
-                    </td>
+                <td><strong>{{ p.name }}</strong></td>
 
-                    <td>{{ phong.so_nguoi }} người</td>
-                    <td><strong>{{ phong.gia_thue }} đ</strong></td>
-                    <td>{{ phong.hop_dong }}</td>
+                <td>{{ p.acreage }} m²</td>
 
-                    <td>
-                        <button class="btn-icon"><i class="bi bi-pencil-square"></i></button>
-                        <button class="btn-icon delete"><i class="bi bi-trash"></i></button>
-                    </td>
-                </tr>
-                {% endfor %}
+                <td>{{ p.capacity }} người</td>
+
+                <td style="font-weight: bold;">
+                    {{ "{:,.0f}".format(p.price) }} đ
+                </td>
+
+                <td>
+                    {% if p.status == 'Đã thuê' or p.status == 'DA_THUE' %}
+                    <span class="badge bg-danger rounded-pill">Đã thuê</span>
+                    {% else %}
+                    <span class="badge bg-success rounded-pill">Trống</span>
+                    {% endif %}
+                </td>
+
+                <td>
+                    <button class="btn btn-sm btn-outline-primary">
+                        <i class="bi bi-pencil-square"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
             </tbody>
         </table>
     </div>

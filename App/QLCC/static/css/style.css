@@ -260,3 +260,185 @@ body {
 .btn-icon.delete:hover {
     color: var(--red-color);
 }
+
+/* --- BỔ SUNG CSS CHO TRANG HỢP ĐỒNG --- */
+
+/* Tiêu đề section */
+.section-title {
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+/* Badge trạng thái chung */
+.status-badge {
+    padding: 6px 16px;
+    border-radius: 50px; /* Bo tròn mạnh để ra hình viên thuốc */
+    font-size: 13px;
+    font-weight: 500;
+    display: inline-block;
+}
+
+/* Màu đỏ nhạt cho "Sắp hết hạn" */
+.status-warning {
+    background-color: #ffe5e5;
+    color: #dc3545;
+    border: 1px solid #f8d7da;
+}
+
+/* Màu xanh nhạt cho "Còn hạn" */
+.status-success {
+    background-color: #d1e7dd;
+    color: #0f5132;
+    border: 1px solid #badbcc;
+}
+
+/* Chỉnh lại font size bảng cho gọn */
+.custom-table td, .custom-table th {
+    font-size: 14px;
+    padding: 18px 12px;
+}
+
+/* --- CSS CHO TRANG HÓA ĐƠN --- */
+
+/* Badge: Đã thanh toán (Nền xanh, chữ xanh đậm) */
+.status-paid {
+    background-color: #d1fae5; /* Xanh lá nhạt */
+    color: #047857;            /* Xanh lá đậm */
+    border: 1px solid #a7f3d0;
+}
+
+/* Badge: Chưa thanh toán (Nền đỏ, chữ đỏ đậm) */
+.status-unpaid {
+    background-color: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+}
+
+/* Căn chỉnh lại cột Tổng tiền */
+.custom-table td:nth-child(8) {
+    font-family: 'Segoe UI', sans-serif;
+    letter-spacing: 0.5px;
+}
+
+
+/* Style cho ô input khi bị khóa (Chế độ xem) */
+.custom-input:disabled {
+    background-color: #e9ecef; /* Màu xám nhạt */
+    color: #495057;
+    border: 1px solid transparent; /* Ẩn viền đi cho giống văn bản */
+    cursor: default; /* Con trỏ chuột bình thường */
+}
+
+/* Style cho ô input khi đang sửa (Chế độ sửa) */
+.custom-input:not(:disabled) {
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1); /* Hiệu ứng phát sáng nhẹ */
+}
+
+/* --- CSS CHO TRANG CLIENT HỢP ĐỒNG --- */
+
+/* 1. Style chung cho các Card (Khối trắng) */
+.custom-card {
+    background: #fff;
+    border-radius: 12px;     /* Bo góc mềm mại */
+    padding: 25px 30px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03); /* Đổ bóng rất nhẹ */
+    border: 1px solid #f0f0f0;
+}
+
+.card-title-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* 2. Phần thông tin hợp đồng  */
+.info-group {
+    margin-bottom: 20px;
+}
+
+.info-group label {
+    font-size: 13px;
+    color: #6c757d; /* Màu xám nhạt cho nhãn */
+    margin-bottom: 4px;
+    display: block;
+}
+
+.info-group .value {
+    font-size: 15px;
+    color: #212529;
+}
+
+/* 3. Phần Đơn giá dịch vụ  */
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 20px;
+    background-color: #f8faff; /* Nền xanh siêu nhạt giống ảnh */
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-weight: 500;
+    color: #495057;
+}
+
+.price-value {
+    font-weight: 600;
+    color: #333;
+}
+
+/* 4. Phần Quy định*/
+.rule-item {
+    display: flex;
+    align-items: flex-start; /* Căn icon lên trên cùng */
+    gap: 15px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #fcfcfc; /* Nền xám rất nhẹ cho mỗi quy định */
+    border-radius: 8px;
+}
+
+.rule-icon {
+    min-width: 24px;
+    color: #0d6efd; /* Màu xanh dương chủ đạo */
+    font-size: 18px;
+    margin-top: 2px; /* Căn chỉnh lại xíu cho khớp với dòng đầu */
+}
+
+.rule-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 3px;
+}
+
+.rule-desc {
+    font-size: 13px;
+    color: #6c757d;
+}
+
+/* --- CSS CHO TRANG HÓA ĐƠN CLIENT --- */
+
+/* Badge màu nền nhạt */
+.bg-danger-light { background-color: #fee2e2; }
+.bg-success-light { background-color: #d1fae5; }
+
+/* Các mục chọn thanh toán trong Modal */
+.payment-option {
+    border: 1px solid #e9ecef;
+    padding: 15px;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s;
+}
+
+.payment-option:hover {
+    background-color: #f8f9fa;
+    border-color: #0d6efd;
+    transform: translateY(-2px);
+}

@@ -1,0 +1,29 @@
+<div class="container mt-4">
+    <div class="d-flex justify-content-between gap-3 flex-wrap">
+
+        <a href="/client/hop-dong"
+           class="ql-item {{ 'active' if active_page == 'client_contract' else '' }}">
+            <i class="bi bi-file-earmark-text"></i>
+            <span>Hợp đồng & Quy định</span>
+        </a>
+
+        <a href="/client/hoa-don"
+           class="ql-item {{ 'active' if active_page == 'client_invoice' else '' }}">
+            <i class="bi bi-currency-dollar"></i>
+            <span>Hóa đơn tháng này</span>
+        </a>
+
+        <a href="/client/lich-su"
+           class="ql-item {{ 'active' if active_page == 'client_history' else '' }}">
+            <i class="bi bi-clock-history"></i>
+            <span>Lịch sử thanh toán</span>
+        </a>
+
+        <a href="/client/su-co"
+           class="ql-item {{ 'active' if active_page == 'client_report' else '' }}">
+            <i class="bi bi-tools"></i>
+            <span>Báo cáo sự cố</span>
+        </a>
+
+    </div>
+</div>

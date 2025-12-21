@@ -1,13 +1,10 @@
 {% extends 'layout/base.html' %}
 
-{% block title %}
-    Tổng quan - Quản lý chung cư
+{% block navbar %}
+    {% include 'layout/quanly_navbar.html' %}
 {% endblock %}
 
 {% block content %}
-
-{% include 'layout/quanly_navbar.html' %}
-
 <div class="container main-dashboard mt-4">
 
     <div class="stats-grid mb-5">
