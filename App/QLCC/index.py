@@ -106,15 +106,15 @@ def quanly_phong():
     return render_template('management/quanlyphong.html',
                            list_phong=ds_phong,
                            active_page='rooms')
+
 @app.route('/management/hop-dong')
 def quanly_hopdong():
-    # Lấy dữ liệu
-    ds_hopdong = get_danh_sach_hop_dong()
+    # Lấy danh sách hợp đồng đã xử lý logic
+    data = get_danh_sach_hop_dong()
 
-    # Render template
-    return render_template('/management/hopdong.html',list_hopdong=ds_hopdong, active_page='contracts')
-
-
+    return render_template('management/hopdong.html',
+                           list_hopdong=data,
+                           active_page='contracts')
 @app.route('/management/hoa-don')
 def quanly_hoadon():
     ds_hoadon = get_danh_sach_hoa_don()

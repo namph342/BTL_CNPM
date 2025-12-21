@@ -81,74 +81,48 @@ class ReportService:
             "expiring_contracts": expiring_contracts
         }
 
-# File: dao/phong_dao.py
+
 def get_danh_sach_phong():
-    """
-    Lấy toàn bộ danh sách căn hộ từ Database MySQL
-    """
-    # Tương đương: SELECT * FROM canho;
     return Canho.query.all()
 
-def get_danh_sach_hop_dong():
 
-    data = [
-        {
-            "ma_hd": "HD001",
-            "phong": "A101",
-            "nguoi_thue": "Nguyễn Văn A",
-            "gia_thue": "3,500,000",
-            "tien_coc": "3,500,000",
-            "ngay_bat_dau": "01/01/2025",
-            "ngay_ket_thuc": "31/12/2025",
-            "trang_thai_code": "warning", # Dùng mã để xử lý màu sắc
-            "trang_thai_text": "Sắp hết hạn (20 ngày)"
-        },
-        {
-            "ma_hd": "HD002",
-            "phong": "A102",
-            "nguoi_thue": "Trần Thị B",
-            "gia_thue": "4,000,000",
-            "tien_coc": "4,000,000",
-            "ngay_bat_dau": "15/07/2025",
-            "ngay_ket_thuc": "15/01/2026",
-            "trang_thai_code": "success",
-            "trang_thai_text": "Còn hạn (35 ngày)"
-        },
-        {
-            "ma_hd": "HD003",
-            "phong": "B201",
-            "nguoi_thue": "Lê Văn C",
-            "gia_thue": "3,800,000",
-            "tien_coc": "2,000,000",
-            "ngay_bat_dau": "01/09/2025",
-            "ngay_ket_thuc": "28/02/2026",
-            "trang_thai_code": "success",
-            "trang_thai_text": "Còn hạn (79 ngày)"
-        },
-        {
-            "ma_hd": "HD004",
-            "phong": "B203",
-            "nguoi_thue": "Phạm Thị D",
-            "gia_thue": "3,700,000",
-            "tien_coc": "3,700,000",
-            "ngay_bat_dau": "10/09/2025",
-            "ngay_ket_thuc": "10/03/2026",
-            "trang_thai_code": "success",
-            "trang_thai_text": "Còn hạn (89 ngày)"
-        },
-        {
-            "ma_hd": "HD005",
-            "phong": "C301",
-            "nguoi_thue": "Hoàng Văn E",
-            "gia_thue": "4,200,000",
-            "tien_coc": "4,200,000",
-            "ngay_bat_dau": "20/07/2025",
-            "ngay_ket_thuc": "20/01/2026",
-            "trang_thai_code": "success",
-            "trang_thai_text": "Còn hạn (40 ngày)"
-        }
-    ]
-    return data
+def get_danh_sach_hop_dong():
+    # 1. Lấy tất cả hợp đồng, sắp xếp cái mới nhất lên đầu (id giảm dần)
+    ds_hopdong = Hopdong.query.order_by(Hopdong.id.desc()).all()
+
+    # 2. Xử lý logic hiển thị (tính ngày còn lại)
+    result = []
+    today = datetime.now()
+
+    for hd in ds_hopdong:
+        # Tính khoảng cách ngày: Ngày kết thúc - Hôm nay
+        delta = hd.end_date - today
+        days_left = delta.days
+
+        # Logic màu sắc và trạng thái
+        status_label = ""
+        badge_class = ""  # Class màu của Bootstrap
+
+        if days_left < 0:
+            status_label = f"Đã quá hạn {abs(days_left)} ngày"
+            badge_class = "danger"  # Màu đỏ
+        elif days_left <= 30:
+            status_label = f"Sắp hết hạn ({days_left} ngày)"
+            badge_class = "warning text-dark"  # Màu vàng
+        else:
+            status_label = "Đang thuê"
+            badge_class = "success"  # Màu xanh
+
+        # Đóng gói dữ liệu để gửi sang HTML
+        result.append({
+            "obj": hd,  # Giữ object gốc để lấy tên User, Canho
+            "start_fmt": hd.start_date.strftime('%d/%m/%Y'),
+            "end_fmt": hd.end_date.strftime('%d/%m/%Y'),
+            "status_label": status_label,
+            "badge_class": badge_class
+        })
+
+    return result
 
 def get_danh_sach_hoa_don():
     data = [

@@ -1,9 +1,10 @@
 import json
+import random
 
 from QLCC import db, app
 from sqlalchemy import Column, Integer, Float, String, Boolean, ForeignKey, Text, DateTime, Enum
 from sqlalchemy.orm import relationship
-from datetime import datetime
+from datetime import datetime, timedelta
 from enum import Enum as EnumRole
 from flask_login import UserMixin
 
@@ -89,3 +90,97 @@ if __name__ == '__main__':
         db.session.add_all([u1, u2, u3])
         db.session.commit()
 
+        list_phong = Canho.query.all()
+
+        if list_phong and u1:
+            for i, phong in enumerate(list_phong):
+
+                # 1. RANDOM NGÀY THÁNG HỢP ĐỒNG
+                if i % 3 == 0:
+                    # Sắp hết hạn
+                    start = datetime.now() - timedelta(days=340)
+                    end = datetime.now() + timedelta(days=20)
+                else:
+                    # Còn hạn dài
+                    start = datetime.now() - timedelta(days=30)
+                    end = datetime.now() + timedelta(days=180)
+
+                # A. TẠO HỢP ĐỒNG (Lưu ý: Bảng Hopdong ko có cột name nên ko thêm mã ở đây đc)
+                hd = Hopdong(
+                    start_date=start,
+                    end_date=end,
+                    status='Đang thuê',
+                    client_id=u1.id,
+                    room_id=phong.id
+                )
+
+                phong.status = 'Đã thuê'
+                db.session.add(hd)
+                db.session.commit()
+
+                # 2. TẠO MÃ HÓA ĐƠN & MÃ CHI TIẾT (Thay đổi ở đây)
+                # Lấy tháng năm hiện tại (Ví dụ: 122025)
+                current_time_str = datetime.now().strftime('%m%Y')
+
+                # Tạo mã: INV-[TênPhòng]-[ThángNăm] (Ví dụ: INV-A101-122025)
+                ma_hoa_don = f"INV-{phong.name}-{current_time_str}"
+
+                # Tạo mã chi tiết: DT-[TênPhòng]-[ThángNăm] (Ví dụ: DT-A101-122025)
+                ma_chi_tiet = f"DT-{phong.name}-{current_time_str}"
+
+                # Random trạng thái
+                da_thanh_toan = random.choice([True, False])
+                trang_thai_hd = 'Đã thanh toán' if da_thanh_toan else 'Chưa thanh toán'
+
+                # B. TẠO HÓA ĐƠN VỚI MÃ MỚI
+                hoa_don = Hoadon(
+                    name=ma_hoa_don,  # <-- Đã sửa thành mã
+                    created_date=datetime.now(),
+                    payment_status=trang_thai_hd,
+                    hopdong_id=hd.id
+                )
+                db.session.add(hoa_don)
+                db.session.commit()
+
+                # 3. RANDOM SỐ LIỆU ĐIỆN NƯỚC
+                e_old = random.randint(100, 500)
+                e_new = e_old + random.randint(30, 100)
+                w_old = random.randint(50, 200)
+                w_new = w_old + random.randint(5, 20)
+
+                tien_dien = (e_new - e_old) * 3500
+                tien_nuoc = (w_new - w_old) * 15000
+                tong_tien = tien_dien + tien_nuoc + int(phong.price)
+
+                # C. TẠO CHI TIẾT VỚI MÃ MỚI
+                chi_tiet = Chitiethoadon(
+                    name=ma_chi_tiet,  # <-- Đã sửa thành mã
+                    apartment_patment="Chuyển khoản" if da_thanh_toan else "Tiền mặt",
+                    electric_old=e_old, electric_new=e_new,
+                    water_old=w_old, water_new=w_new,
+                    electric_fee=3500, water_fee=15000,
+                    Total_fee=tong_tien,
+                    hoadon_id=hoa_don.id
+                )
+                db.session.add(chi_tiet)
+
+            # D. TẠO SỰ CỐ
+            cac_loi = [
+                ("Hỏng điều hòa", "Điều hòa kêu to, không mát"),
+                ("Rò rỉ nước", "Vòi nước nhà vệ sinh bị rỉ"),
+                ("Mất wifi", "Mạng chập chờn không vào được"),
+                ("Kẹt khóa cửa", "Khóa cửa chính bị kẹt khó mở"),
+                ("Bóng đèn cháy", "Đèn phòng ngủ bị cháy")
+            ]
+
+            for _ in range(5):
+                loi_random = random.choice(cac_loi)
+                su_co = Suco(
+                    name=loi_random[0],
+                    description=loi_random[1],
+                    status=random.choice(['Chưa xử lý', 'Đang xử lý']),
+                    client_id=u1.id
+                )
+                db.session.add(su_co)
+
+            db.session.commit()
