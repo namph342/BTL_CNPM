@@ -1,13 +1,13 @@
-.{
+{
     font-family: tahoma
 }
 
-body{
+body {
     background-color: white
 }
 
-.image-intro{
-    text-fill:white
+.image-intro {
+    text-fill: white;
     height: 400px;
     background-image: url('https://res.cloudinary.com/dhmt3nfpz/image/upload/v1765535658/64674e3268f0f8aad6494764c978bc72_t3sg18.jpg');
     background-size: cover;
@@ -17,15 +17,246 @@ body{
 
 #apartmentCarousel .carousel-control-prev,
 #apartmentCarousel .carousel-control-next {
-  width: 5%;              /* thu nhỏ vùng click */
-  top: 50%;               /* căn giữa theo chiều dọc */
-  transform: translateY(-50%);
+    width: 5%; /* thu nhỏ vùng click */
+    top: 50%; /* căn giữa theo chiều dọc */
+    transform: translateY(-50%);
 }
 
 #apartmentCarousel .carousel-control-prev {
-  left: -60px;            /* đẩy nút Prev ra ngoài khung */
+    left: -60px; /* đẩy nút Prev ra ngoài khung */
 }
 
 #apartmentCarousel .carousel-control-next {
-  right: -60px;           /* đẩy nút Next ra ngoài khung */
+    right: -60px; /* đẩy nút Next ra ngoài khung */
+}
+
+.ql-item {
+    flex: 1;
+    padding: 10px 12px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background-color: #f1f3f5;
+    text-decoration: none;
+    color: #000;
+}
+
+.ql-item.active {
+    background-color: #cfe2ff;
+    font-weight: 500;
+}
+
+:root {
+    --blue-color: #0d6efd;
+    --blue-bg: #e7f1ff;
+    --green-color: #198754;
+    --green-bg: #d1e7dd;
+    --orange-color: #fd7e14;
+    --orange-bg: #ffecb5;
+    --red-color: #dc3545;
+    --red-bg: #f8d7da;
+    --text-gray: #6c757d;
+    --card-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* Các class màu tiện dụng */
+.text-blue {
+    color: var(--blue-color) !important;
+}
+
+.bg-blue-light {
+    background-color: var(--blue-bg) !important;
+}
+
+.text-green {
+    color: var(--green-color) !important;
+}
+
+.bg-green-light {
+    background-color: var(--green-bg) !important;
+}
+
+.text-orange {
+    color: var(--orange-color) !important;
+}
+
+.bg-orange-light {
+    background-color: var(--orange-bg) !important;
+}
+
+.text-red {
+    color: var(--red-color) !important;
+}
+
+.bg-red-light {
+    background-color: var(--red-bg) !important;
+}
+
+/* --- CSS CHO PHẦN THỐNG KÊ (STATS) --- */
+.stats-grid {
+    display: grid;
+    /* Chia làm 3 cột đều nhau. Trên mobile tự động về 1 cột */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+.stat-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: var(--card-shadow);
+    border: 1px solid #f0f0f0;
+    transition: transform 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+}
+
+.card-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+}
+
+.card-title {
+    font-size: 14px;
+    color: var(--text-gray);
+    margin-bottom: 8px;
+}
+
+.card-number {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+}
+
+/* --- CSS CHO PHẦN HỢP ĐỒNG --- */
+.section-title {
+    font-weight: 600;
+    color: #333;
+}
+
+.contracts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.contract-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px 25px;
+    display: flex;
+    justify-content: space-between; /* Đẩy nội dung sang 2 bên */
+    align-items: center;
+    box-shadow: var(--card-shadow);
+    border: 1px solid #f0f0f0;
+}
+
+.tenant-name {
+    font-weight: 600;
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.expiry-date {
+    font-size: 13px;
+    color: var(--text-gray);
+}
+
+.days-left-badge {
+    background-color: var(--orange-color);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+/* --- CSS CHO TRANG QUẢN LÝ PHÒNG (TABLE STYLE) --- */
+
+.table-container {
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: var(--card-shadow); /* Dùng lại biến shadow cũ */
+    border: 1px solid #f0f0f0;
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse; /* Gộp đường viền */
+}
+
+.custom-table th {
+    text-align: left;
+    padding: 15px 10px;
+    color: var(--text-gray);
+    font-weight: 600;
+    font-size: 14px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.custom-table td {
+    padding: 15px 10px;
+    color: #333;
+    font-size: 15px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: middle;
+}
+
+/* Hiệu ứng khi rê chuột vào hàng */
+.custom-table tbody tr:hover {
+    background-color: #f9fafb;
+}
+
+/* --- STYLE CHO TRẠNG THÁI (BADGE) --- */
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+/* Trạng thái: Đã thuê (Xanh lá nhạt) */
+.status-rented {
+    background-color: var(--green-bg);
+    color: var(--green-color);
+}
+
+/* Trạng thái: Trống (Xám nhạt) */
+.status-empty {
+    background-color: #f3f4f6; /* Màu xám nền */
+    color: #6b7280;            /* Màu chữ xám */
+}
+
+/* --- NÚT HÀNH ĐỘNG (Sửa/Xóa) --- */
+.btn-icon {
+    border: none;
+    background: none;
+    color: var(--text-gray);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 5px;
+    transition: 0.2s;
+}
+
+.btn-icon:hover {
+    color: var(--blue-color);
+}
+
+.btn-icon.delete:hover {
+    color: var(--red-color);
 }

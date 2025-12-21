@@ -2,7 +2,8 @@ from flask import render_template, request, redirect, url_for, session, flash
 from flask_login import login_user, current_user, logout_user
 from QLCC import models
 from QLCC import app, dao, db, login_manager
-from QLCC.models import UserRole, UserRole
+from QLCC.dao import ReportService, get_danh_sach_phong
+from QLCC.models import UserRole, UserRole, Canho, Hopdong, Hoadon, User, Chitiethoadon, Suco
 import cloudinary.uploader
 
 def chunk_list(data, size):
@@ -83,10 +84,40 @@ def apartment_details(id):
     a=dao.load_apartment_by_id(id)
     return render_template('apartment-details.html', apt=a)
 
-@app.route('/management', methods=['GET', 'POST'])
+@app.route('/management')
 def management():
-    p = dao.get_user_by_id(1)
-    return render_template('management/management.html', UserRole = UserRole, p=p)
+    if not current_user.is_authenticated or current_user.role != UserRole.ADMIN:
+        return redirect(url_for('login_account'))
+
+    dashboard_data = ReportService.get_dashboard_data()
+    print(dashboard_data)
+    return render_template(
+        'management/management.html',
+        p=current_user,
+        UserRole=UserRole,
+
+    )
+
+@app.route('/management/tong-quan')
+def tong_quan():
+    return render_template('/management/tongquan.html', active_page='overview') # active_page để tô màu nút
+
+
+@app.route('/management/phong')
+def quanly_phong():
+    danh_sach = get_danh_sach_phong()
+    return render_template('/management/quanlyphong.html',list_phong=danh_sach, active_page='rooms')
+# @app.route('/management/hop-dong')
+# def tong_quan():
+#     return render_template('/management/hoadon.html', active_page='overview') # active_page để tô màu nút
+#
+# @app.route('/management/hoa-don')
+# def tong_quan():
+#     return render_template('/management/caidat.html', active_page='overview') # active_page để tô màu nút
+
+# @app.route('/management/cai-dat')
+# def tong_quan():
+#     return render_template('/management/hopdong.html', active_page='overview') # active_page để tô màu nút
 
 @app.route('/client', methods=['GET', 'POST'])
 def client():

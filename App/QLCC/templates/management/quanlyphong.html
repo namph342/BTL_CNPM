@@ -1,2 +1,55 @@
-<h3>Quản lý phòng</h3>
-            <p>Nội dung quản lý phòng.</p>
+{% extends 'layout/base.html' %}
+
+{% block title %}
+    Quản lý Phòng - Chung cư Mini
+{% endblock %}
+
+{% block content %}
+
+{% include 'layout/quanly_navbar.html' %}
+
+<div class="container mt-4">
+
+    <div class="table-container">
+        <h4 class="mb-4" style="font-weight: 600; color: #333;">Danh sách phòng</h4>
+
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>Mã phòng</th>
+                    <th>Trạng thái</th>
+                    <th>Số người</th>
+                    <th>Giá thuê</th>
+                    <th>Hợp đồng đến</th>
+                    <th>Hành động</th> </tr>
+            </thead>
+            <tbody>
+                {% for phong in list_phong %}
+                <tr>
+                    <td><strong>{{ phong.ma_phong }}</strong></td>
+
+                    <td>
+                        {% if phong.trang_thai == 'Đã thuê' %}
+                            <span class="status-badge status-rented">Đã thuê</span>
+                        {% else %}
+                            <span class="status-badge status-empty">Trống</span>
+                        {% endif %}
+                    </td>
+
+                    <td>{{ phong.so_nguoi }} người</td>
+                    <td><strong>{{ phong.gia_thue }} đ</strong></td>
+                    <td>{{ phong.hop_dong }}</td>
+
+                    <td>
+                        <button class="btn-icon"><i class="bi bi-pencil-square"></i></button>
+                        <button class="btn-icon delete"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+{% endblock %}
