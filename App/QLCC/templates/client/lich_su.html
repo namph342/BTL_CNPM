@@ -1,0 +1,60 @@
+
+{% extends 'layout/base.html' %}
+
+{% block title %}Hợp đồng & Quy định{% endblock %}
+
+{% block navbar %}
+    {% include 'layout/client_navbar.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5" style="max-width: 1000px;">
+
+    <div class="history-card">
+        <h5 class="card-title">Lịch sử thanh toán</h5>
+
+        <div class="table-responsive">
+            <table class="table table-custom table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th class="ps-3">Mã thanh toán</th>
+                        <th>Tháng</th>
+                        <th>Ngày thanh toán</th>
+                        <th>Số tiền</th>
+                        <th>Phương thức</th>
+                        <th class="text-end pe-3">Trạng thái</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in history %}
+                    <tr>
+                        <td class="ps-3 text-secondary">{{ item.trans_code }}</td>
+
+                        <td>{{ item.month }}</td>
+
+                        <td>{{ item.date }}</td>
+
+                        <td class="fw-bold">{{ item.amount }} đ</td>
+
+                        <td class="text-secondary">{{ item.method }}</td>
+
+                        <td class="text-end pe-3">
+                            <span class="badge-paid">
+                                {{ item.status }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% if not history %}
+            <div class="text-center py-5">
+                <p class="text-muted">Chưa có giao dịch thanh toán nào được ghi nhận.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

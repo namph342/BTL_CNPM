@@ -1,65 +1,89 @@
 {% extends 'layout/base.html' %}
 
-{% block title %}
-    Quản lý Hóa đơn
-{% endblock %}
+{% block title %}Trang hóa đơn{% endblock %}
 
 {% block navbar %}
     {% include 'layout/quanly_navbar.html' %}
 {% endblock %}
-
 {% block content %}
-<div class="container mt-4">
+<div class="container-fluid mt-4">
+    <button class="btn btn-primary px-4 py-2 shadow-sm fw-bold" style="border-radius: 10px;">
+        <i class="bi bi-plus-lg me-2"></i>Tạo hóa đơn
+    </button>
+</div>
 
-    <div class="table-container">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h5 class="section-title">Quản lý hóa đơn</h5>
-            <button class="btn btn-primary btn-sm">
-                <i class="bi bi-plus-lg"></i> Tạo hóa đơn tháng này
-            </button>
-        </div>
-
-        <table class="custom-table">
+<div class="card-modern">
+    <div class="table-responsive">
+        <table class="table table-modern mb-0">
             <thead>
-                <tr>
-                    <th>Mã HĐ</th>
-                    <th>Phòng</th>
-                    <th>Tháng</th>
-                    <th>Tiền điện</th>
-                    <th>Tiền nước</th>
-                    <th>Tiền mạng</th>
-                    <th>Tiền thuê</th>
-                    <th>Tổng</th>
-                    <th>Trạng thái</th>
-                </tr>
+            <tr>
+                <th class="ps-4">Mã Hóa Đơn</th>
+                <th>Phòng</th>
+                <th>Khách Hàng</th>
+                <th>Ngày Lập</th>
+                <th>Tổng Tiền</th>
+                <th>Trạng Thái</th>
+                <th class="text-end pe-4">Thao tác</th>
+            </tr>
             </thead>
             <tbody>
-                {% for hd in list_hoadon %}
-                <tr>
-                    <td><strong>{{ hd.ma_hd }}</strong></td>
-                    <td><span class="room-badge">{{ hd.phong }}</span></td>
-                    <td>{{ hd.thang }}</td>
-                    <td>{{ hd.tien_dien }} ₫</td>
-                    <td>{{ hd.tien_nuoc }} ₫</td>
-                    <td>{{ hd.tien_mang }} ₫</td>
-                    <td>{{ hd.tien_thue }} ₫</td>
-                    <td style="font-weight: bold; color: #333;">{{ hd.tong_tien }} ₫</td>
+            {% for item in list_hoadon %}
+            <tr>
+                <td class="ps-4"><span class="text-code">{{ item.code }}</span></td>
 
-                    <td>
-                        {% if hd.trang_thai == 'da_thanh_toan' %}
-                            <span class="status-badge status-paid">
-                                {{ hd.trang_thai_text }}
+                <td>
+                    <div class="d-flex align-items-center">
+                        <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-2"
+                             style="width: 32px; height: 32px; color: #64748b;">
+                            <i class="bi bi-house-door"></i>
+                        </div>
+                        <span class="fw-bold">{{ item.room_name }}</span>
+                    </div>
+                </td>
+
+                <td><span class="fw-medium">{{ item.client_name }}</span></td>
+
+                <td class="text-muted">
+                    <i class="bi bi-calendar3 me-1 small"></i> {{ item.created_date }}
+                </td>
+
+                <td class="fw-bold text-dark fs-6">
+                    {{ item.total_money }} <span class="small text-muted fw-normal">đ</span>
+                </td>
+
+                <td>
+                            <span class="badge-soft badge-soft-{{ item.status_class }}">
+                                {% if item.status_class == 'success' %}
+                                    <i class="bi bi-check2-circle me-1"></i>
+                                {% else %}
+                                    <i class="bi bi-clock-history me-1"></i>
+                                {% endif %}
+                                {{ item.status }}
                             </span>
-                        {% else %}
-                            <span class="status-badge status-unpaid">
-                                {{ hd.trang_thai_text }}
-                            </span>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
+                </td>
+
+                <td class="text-end pe-4">
+                    <a class="btn-icon text-secondary me-1" href="/invoice/print/{{ item.id }}"
+                       onclick="window.open(this.href, 'targetWindow', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=900,height=800'); return false;"
+                       target="_blank" title="In hóa đơn">
+                        <i class="bi bi-printer-fill"></i>
+                    </a>
+
+                    <button class="btn-icon text-primary" title="Xem chi tiết">
+                        <i class="bi bi-eye-fill"></i>
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
             </tbody>
         </table>
+
+        {% if not list_hoadon %}
+        <div class="text-center py-5">
+            <h6 class="text-muted">Chưa có hóa đơn nào được tạo</h6>
+        </div>
+        {% endif %}
     </div>
 </div>
+
 {% endblock %}

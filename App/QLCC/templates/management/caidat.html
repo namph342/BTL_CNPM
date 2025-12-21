@@ -1,0 +1,113 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Cài đặt hệ thống{% endblock %}
+
+{% block navbar %}
+    {% include 'layout/quanly_navbar.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4 mb-5">
+    <h3 class="fw-bold text-dark mb-4">Cài đặt & Đơn giá</h3>
+
+    <div class="row">
+
+        <div class="col-md-5">
+            <div class="card shadow-sm border-0 mb-4 h-100">
+
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold text-primary"><i class="bi bi-tag-fill me-2"></i>Đơn giá dịch vụ</h5>
+
+                    <button type="button" id="btnEnableEdit" class="btn btn-sm btn-outline-primary" onclick="enableEditMode()">
+                        <i class="bi bi-pencil-square me-1"></i> Chỉnh sửa
+                    </button>
+                </div>
+
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('quanly_caidat') }}">
+                        <input type="hidden" name="btn_update_price" value="1">
+
+                        <fieldset id="priceFields" disabled>
+                            <div class="mb-3">
+                                <label class="fw-bold text-secondary small text-uppercase">Tiền điện (kWh)</label>
+                                <div class="input-group mt-1">
+                                    <span class="input-group-text bg-light"><i class="bi bi-lightning-charge-fill text-warning"></i></span>
+                                    <input type="number" name="electric_fee" class="form-control fw-bold text-dark"
+                                           value="{{ setting.electric_fee }}" required>
+                                    <span class="input-group-text bg-light">VNĐ</span>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="fw-bold text-secondary small text-uppercase">Tiền nước (m³)</label>
+                                <div class="input-group mt-1">
+                                    <span class="input-group-text bg-light"><i class="bi bi-droplet-fill text-primary"></i></span>
+                                    <input type="number" name="water_fee" class="form-control fw-bold text-dark"
+                                           value="{{ setting.water_fee }}" required>
+                                    <span class="input-group-text bg-light">VNĐ</span>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="fw-bold text-secondary small text-uppercase">Internet (Tháng)</label>
+                                <div class="input-group mt-1">
+                                    <span class="input-group-text bg-light"><i class="bi bi-wifi text-success"></i></span>
+                                    <input type="number" name="internet_fee" class="form-control fw-bold text-dark"
+                                           value="{{ setting.internet_fee }}" required>
+                                    <span class="input-group-text bg-light">VNĐ</span>
+                                </div>
+                            </div>
+
+                            <div id="actionButtons" class="d-none mt-4 pt-3 border-top text-end">
+                                <button type="button" class="btn btn-secondary me-2" onclick="cancelEditMode()">
+                                    Hủy
+                                </button>
+                                <button type="submit" class="btn btn-primary fw-bold px-4">
+                                    <i class="bi bi-save me-2"></i>Lưu Giá Mới
+                                </button>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="card-footer bg-light py-2" id="statusFooter">
+                    <small class="text-muted"><i class="bi bi-lock-fill me-1"></i>Đang ở chế độ xem</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-7">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 fw-bold text-dark"><i class="bi bi-list-check me-2"></i>Danh sách Nội quy</h5>
+                </div>
+                <div class="card-body">
+
+                    <form method="POST" action="{{ url_for('quanly_caidat') }}" class="d-flex mb-4">
+                        <input type="hidden" name="btn_add_rule" value="1">
+                        <input type="text" name="new_rule_content" class="form-control me-2" placeholder="Nhập quy định mới..." required>
+                        <button type="submit" class="btn btn-success px-3" style="min-width: 100px;">
+                            <i class="bi bi-plus-lg"></i> Thêm
+                        </button>
+                    </form>
+
+                    <div class="list-group list-group-flush border rounded">
+                        {% for rule in rules %}
+                        <div class="list-group-item d-flex justify-content-between align-items-center py-3">
+                            <span class="d-flex align-items-start">
+                                <i class="bi bi-check-circle-fill text-success mt-1 me-2"></i>
+                                {{ rule.content }}
+                            </span>
+                            <a href="/management/cai-dat/delete-rule/{{ rule.id }}"
+                               class="btn btn-outline-danger btn-sm border-0 ms-2"
+                               onclick="return confirm('Xóa quy định này?')">
+                                <i class="bi bi-trash-fill"></i>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

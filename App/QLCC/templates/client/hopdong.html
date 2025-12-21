@@ -7,87 +7,94 @@
 {% endblock %}
 
 {% block content %}
-<div class="container mt-4 mb-5">
+<div class="container mt-4 mb-5" style="max-width: 1000px;">
 
-    <div class="custom-card mb-4">
-        <h5 class="card-title-text">Thông tin hợp đồng</h5>
+    <div class="white-card">
+        <h5 class="section-title">Thông tin hợp đồng</h5>
 
-        <div class="row mt-4">
+        {% if contract %}
+        <div class="row">
             <div class="col-md-6">
                 <div class="info-group">
-                    <label>Số phòng</label>
-                    <div class="value text-dark fw-bold">{{ hopdong.so_phong }}</div>
+                    <div class="info-label">Số phòng</div>
+                    <div class="info-value">{{ contract.room_name }}</div>
                 </div>
                 <div class="info-group">
-                    <label>Ngày bắt đầu</label>
-                    <div class="value">{{ hopdong.ngay_bat_dau }}</div>
+                    <div class="info-label">Ngày bắt đầu</div>
+                    <div class="info-value">{{ contract.start_date }}</div>
                 </div>
                 <div class="info-group">
-                    <label>Tiền thuê hàng tháng</label>
-                    <div class="value text-primary fw-bold">{{ hopdong.tien_thue }} đ</div>
+                    <div class="info-label">Tiền thuê hàng tháng</div>
+                    <div class="info-value text-blue-highlight">{{ contract.room_price }}</div>
                 </div>
                 <div class="info-group">
-                    <label>Số người ở</label>
-                    <div class="value">{{ hopdong.so_nguoi }}</div>
-                </div>
+                    <div class="info-label">Số người ở</div>
+                    <div class="info-value">3/4 người</div> </div>
             </div>
 
             <div class="col-md-6">
                 <div class="info-group">
-                    <label>Người thuê</label>
-                    <div class="value">{{ hopdong.nguoi_thue }}</div>
+                    <div class="info-label">Người thuê</div>
+                    <div class="info-value">{{ current_user.name }}</div>
                 </div>
                 <div class="info-group">
-                    <label>Ngày kết thúc</label>
-                    <div class="value">{{ hopdong.ngay_ket_thuc }}</div>
+                    <div class="info-label">Ngày kết thúc</div>
+                    <div class="info-value">{{ contract.end_date }}</div>
                 </div>
                 <div class="info-group">
-                    <label>Tiền đặt cọc</label>
-                    <div class="value fw-bold">{{ hopdong.tien_coc }} đ</div>
+                    <div class="info-label">Tiền đặt cọc</div>
+                    <div class="info-value">{{ contract.deposit }}</div>
+                </div>
+                 <div class="info-group">
+                    <div class="info-label">Trạng thái</div>
+                    <span class="badge bg-{{ contract.badge_class }} bg-opacity-10 text-{{ contract.badge_class }} px-3 py-1">
+                        {{ contract.status }}
+                    </span>
                 </div>
             </div>
         </div>
+        {% else %}
+        <p class="text-muted text-center py-4">Bạn chưa có hợp đồng nào.</p>
+        {% endif %}
     </div>
 
-    <div class="custom-card mb-4">
-        <h5 class="card-title-text">Đơn giá dịch vụ hiện tại</h5>
-        <div class="price-list mt-3">
+    <div class="white-card">
+        <h5 class="section-title">Đơn giá dịch vụ hiện tại</h5>
 
-            <div class="price-row">
-                <span>Giá điện</span>
-                <span class="price-value">{{ giaservice.gia_dien }} đ/kWh</span>
-            </div>
+        <div class="price-row">
+            <span class="price-label">Giá điện</span>
+            <span class="price-number">{{ "{:,.0f}".format(setting.electric_fee) }} đ/kWh</span>
+        </div>
 
-            <div class="price-row">
-                <span>Giá nước</span>
-                <span class="price-value">{{ giaservice.gia_nuoc }} đ/m³</span>
-            </div>
+        <div class="price-row">
+            <span class="price-label">Giá nước</span>
+            <span class="price-number">{{ "{:,.0f}".format(setting.water_fee) }} đ/m³</span>
+        </div>
 
-            <div class="price-row">
-                <span>Giá Internet</span>
-                <span class="price-value">{{ giaservice.gia_internet }} đ/tháng</span>
-            </div>
-
+        <div class="price-row">
+            <span class="price-label">Giá Internet</span>
+            <span class="price-number">{{ "{:,.0f}".format(setting.internet_fee) }} đ/tháng</span>
         </div>
     </div>
 
-    <div class="custom-card">
-        <h5 class="card-title-text">Quy định chung cư</h5>
-        <div class="rules-list mt-3">
+    <div class="white-card">
+        <h5 class="section-title">Quy định chung cư</h5>
 
-            {% for rule in quydinh %}
-            <div class="rule-item">
+        {% if rules %}
+            {% for rule in rules %}
+            <div class="rule-row">
                 <div class="rule-icon">
-                    <i class="bi {{ rule.icon }}"></i>
+                    <i class="bi bi-info-circle"></i>
                 </div>
                 <div class="rule-content">
-                    <div class="rule-title">{{ rule.tieu_de }}</div>
-                    <div class="rule-desc">{{ rule.noi_dung }}</div>
+                    <div class="fw-bold mb-1">Quy định #{{ loop.index }}</div>
+                    <div>{{ rule.content }}</div>
                 </div>
             </div>
             {% endfor %}
-
-        </div>
+        {% else %}
+            <p class="text-muted text-center py-3">Chưa có nội quy.</p>
+        {% endif %}
     </div>
 
 </div>

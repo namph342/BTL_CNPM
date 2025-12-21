@@ -9,105 +9,161 @@
 {% block content %}
 <div class="container mt-4 mb-5" style="max-width: 800px;">
 
-    <div class="custom-card">
-        <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
-            <h5 class="fw-bold m-0">Hóa đơn tháng {{ hoadon.thang }}</h5>
-
-            {% if hoadon.trang_thai == 'chua_thanh_toan' %}
-            <span class="badge bg-danger-light text-danger px-3 py-2 rounded-pill">Chưa thanh toán</span>
+    {% if invoice %}
+    <div class="invoice-card">
+        <div class="invoice-header">
+            <h5 class="mb-0 fw-bold text-dark">Hóa đơn {{ invoice.created_date }}</h5>
+            {% if invoice.status == 'Đã thanh toán' %}
+                <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill">Đã thanh toán</span>
             {% else %}
-            <span class="badge bg-success-light text-success px-3 py-2 rounded-pill">Đã thanh toán</span>
+                <span class="badge bg-danger bg-opacity-10 text-danger px-3 py-2 rounded-pill">Chưa thanh toán</span>
             {% endif %}
         </div>
 
-        <div class="invoice-items">
-            {% for item in hoadon.chi_tiet %}
-            <div class="item-row d-flex justify-content-between align-items-center mb-4">
-                <div class="item-info">
-                    <div class="item-name fw-bold text-secondary">{{ item.ten }}</div>
-                    <div class="item-desc text-muted small">{{ item.mota }}</div>
+        <div class="invoice-body">
+            <div class="bill-row">
+                <div>
+                    <div class="bill-label">Tiền điện</div>
+                    <div class="bill-sub">{{ invoice.e_usage }}</div>
                 </div>
-                <div class="item-price fw-bold">{{ item.thanh_tien }} đ</div>
+                <div class="bill-amount">{{ invoice.e_total }} đ</div>
             </div>
-            {% endfor %}
-        </div>
 
-        <div class="total-section mt-4 pt-3 border-top">
-            <div class="d-flex justify-content-between align-items-center">
-                <span class="fw-bold fs-5">Tổng cộng</span>
-                <span class="fw-bold fs-4 text-primary">{{ hoadon.tong_cong }} đ</span>
+            <div class="bill-row">
+                <div>
+                    <div class="bill-label">Tiền nước</div>
+                    <div class="bill-sub">{{ invoice.w_usage }}</div>
+                </div>
+                <div class="bill-amount">{{ invoice.w_total }} đ</div>
             </div>
-        </div>
 
-        {% if hoadon.trang_thai == 'chua_thanh_toan' %}
-        <div class="alert alert-warning mt-4 d-flex align-items-start gap-2">
-            <i class="bi bi-exclamation-circle-fill mt-1"></i>
-            <div>
-                <strong>Hạn thanh toán: {{ hoadon.han_thanh_toan }}</strong><br>
-                <span class="small">Vui lòng thanh toán trước ngày này để tránh phí phạt.</span>
+            <div class="bill-row">
+                <div>
+                    <div class="bill-label">Tiền Internet</div>
+                    <div class="bill-sub">Gói cố định</div>
+                </div>
+                <div class="bill-amount">{{ invoice.net_total }} đ</div>
             </div>
-        </div>
 
-        <button class="btn btn-primary w-100 py-3 mt-2 fw-bold"
-                data-bs-target="#paymentModal" data-bs-toggle="modal">
-            Thanh toán ngay
-        </button>
-        {% endif %}
+            <div class="bill-row">
+                <div>
+                    <div class="bill-label">Tiền thuê phòng</div>
+                    <div class="bill-sub">Tháng này</div>
+                </div>
+                <div class="bill-amount">{{ invoice.room_total }} đ</div>
+            </div>
+
+            <div class="total-row">
+                <span class="total-label">Tổng cộng</span>
+                <span class="total-amount">{{ invoice.final_total }} đ</span>
+            </div>
+
+            {% if invoice.status != 'Đã thanh toán' %}
+            <div class="warning-box">
+                <i class="bi bi-exclamation-circle-fill warning-icon"></i>
+                <div>
+                    <div class="fw-bold">Hạn thanh toán: {{ invoice.due_date }}</div>
+                    <div class="small mt-1">Vui lòng thanh toán trước ngày {{ invoice.due_date }} để tránh phí phạt và gián đoạn dịch vụ.</div>
+                </div>
+            </div>
+
+            <button class="btn-pay-now shadow-sm" data-bs-toggle="modal" data-bs-target="#paymentModal">
+                Thanh toán ngay
+            </button>
+            {% else %}
+            <div class="alert alert-success mt-4 text-center border-0 bg-success bg-opacity-10 text-success">
+                <i class="bi bi-check-circle-fill me-2"></i> Cảm ơn bạn đã thanh toán hóa đơn này!
+            </div>
+            {% endif %}
+        </div>
     </div>
+    {% else %}
+    <div class="text-center py-5">
+        <img src="https://cdn-icons-png.flaticon.com/512/4076/4076432.png" width="100" class="mb-3 opacity-50">
+        <h5 class="text-muted">Không có hóa đơn nào cần thanh toán.</h5>
+    </div>
+    {% endif %}
+
 </div>
 
-<div aria-hidden="true" class="modal fade" id="paymentModal" tabindex="-1">
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header border-0 pb-0">
+        <div class="modal-content rounded-4 border-0 shadow-lg">
+            <div class="modal-header border-bottom-0 pb-0">
                 <h5 class="modal-title fw-bold">Chọn phương thức thanh toán</h5>
-                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body pt-4">
+                <p class="text-muted mb-4 small">Vui lòng chọn một trong các phương thức dưới đây để hoàn tất giao dịch.</p>
 
-                <div class="payment-option mb-3" onclick="selectPayment('momo')">
-                    <div class="d-flex align-items-center gap-3">
-                        <img class="rounded" src="https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png"
-                             width="40">
-                        <div>
-                            <div class="fw-bold">Ví MoMo</div>
-                            <div class="small text-muted">Quét mã QR cực nhanh</div>
-                        </div>
+                <div class="payment-option" onclick="selectPayment('momo')">
+                    <img src="https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png" class="payment-logo">
+                    <div>
+                        <div class="fw-bold text-dark">Ví MoMo</div>
+                        <div class="small text-muted">Quét mã QR nhanh chóng</div>
                     </div>
-                    <i class="bi bi-chevron-right text-muted"></i>
+                    <i class="bi bi-chevron-right ms-auto text-muted"></i>
                 </div>
 
-                <div class="payment-option mb-3" onclick="selectPayment('bank')">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="bg-primary text-white rounded d-flex align-items-center justify-content-center"
-                             style="width:40px; height:40px">
-                            <i class="bi bi-bank"></i>
-                        </div>
-                        <div>
-                            <div class="fw-bold">Chuyển khoản Ngân hàng</div>
-                            <div class="small text-muted">Vietcombank, MB, Techcom...</div>
-                        </div>
+                <div class="payment-option" onclick="selectPayment('bank')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2830/2830284.png" class="payment-logo">
+                    <div>
+                        <div class="fw-bold text-dark">Chuyển khoản Ngân hàng</div>
+                        <div class="small text-muted">Vietcombank, MB, Techcom...</div>
                     </div>
-                    <i class="bi bi-chevron-right text-muted"></i>
+                    <i class="bi bi-chevron-right ms-auto text-muted"></i>
                 </div>
 
                 <div class="payment-option" onclick="selectPayment('cash')">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="bg-success text-white rounded d-flex align-items-center justify-content-center"
-                             style="width:40px; height:40px">
-                            <i class="bi bi-cash-coin"></i>
-                        </div>
-                        <div>
-                            <div class="fw-bold">Tiền mặt</div>
-                            <div class="small text-muted">Thanh toán trực tiếp cho quản lý</div>
-                        </div>
+                    <img src="https://cdn-icons-png.flaticon.com/512/2331/2331941.png" class="payment-logo">
+                    <div>
+                        <div class="fw-bold text-dark">Tiền mặt</div>
+                        <div class="small text-muted">Thu phí tận phòng</div>
                     </div>
-                    <i class="bi bi-chevron-right text-muted"></i>
+                    <i class="bi bi-chevron-right ms-auto text-muted"></i>
+                </div>
+
+                <div class="payment-option" onclick="selectPayment('counter')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/609/609803.png" class="payment-logo">
+                    <div>
+                        <div class="fw-bold text-dark">Tại văn phòng BQL</div>
+                        <div class="small text-muted">Thanh toán trực tiếp</div>
+                    </div>
+                    <i class="bi bi-chevron-right ms-auto text-muted"></i>
+                </div>
+
+                <div id="paymentDetails" class="mt-4 p-3 bg-light rounded-3 d-none">
+                    <div id="momoContent" class="d-none text-center">
+                        <h6 class="fw-bold text-danger">Quét mã MoMo</h6>
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg" width="150" class="my-2 border p-1 bg-white">
+                        <div class="small">Nội dung: <strong>PHONG A101 T12</strong></div>
+                    </div>
+
+                    <div id="bankContent" class="d-none">
+                        <h6 class="fw-bold text-primary mb-3">Thông tin chuyển khoản</h6>
+                        <ul class="list-unstyled small mb-0">
+                            <li class="mb-2">🏦 <strong>Ngân hàng:</strong> Vietcombank</li>
+                            <li class="mb-2">💳 <strong>Số TK:</strong> 1014686868</li>
+                            <li class="mb-2">👤 <strong>Chủ TK:</strong> BAN QUAN LY</li>
+                            <li>📝 <strong>Nội dung:</strong> PHONG A101 T12</li>
+                        </ul>
+                    </div>
+
+                    <div id="cashContent" class="d-none text-center">
+                        <i class="bi bi-check-circle-fill text-success fs-1"></i>
+                        <p class="mt-2 mb-0 fw-bold">Đã gửi yêu cầu!</p>
+                        <small>Nhân viên sẽ đến thu phí từ 18h-20h hôm nay.</small>
+                    </div>
+
+                    <div id="counterContent" class="d-none text-center">
+                        <i class="bi bi-geo-alt-fill text-danger fs-1"></i>
+                        <p class="mt-2 mb-0 fw-bold">Văn phòng BQL Tầng 1</p>
+                        <small>Giờ làm việc: 8h00 - 17h30 (T2-T7)</small>
+                    </div>
                 </div>
 
             </div>
         </div>
     </div>
 </div>
-
 {% endblock %}

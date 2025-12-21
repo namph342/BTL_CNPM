@@ -1,0 +1,51 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Soát vé ra vào{% endblock %}
+
+{% block navbar %}
+{% include 'layout/baove_navbar.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+
+    <div class="search-container shadow-sm">
+        <label class="form-label fw-bold mb-3">Kiểm tra thông tin cư dân</label>
+        <form action="{{ url_for('security_soatve') }}" method="GET" class="input-group">
+            <input type="text" name="keyword" class="form-control search-input"
+                   placeholder="Nhập tên, số phòng hoặc số điện thoại..." value="{{ kw }}">
+            <button type="submit" class="btn btn-primary btn-search text-white">
+                <i class="bi bi-search me-2"></i> Kiểm tra
+            </button>
+        </form>
+    </div>
+
+    <h6 class="fw-bold mb-3 text-secondary">Danh sách cư dân</h6>
+    <div class="row g-3">
+        {% for r in residents %}
+        <div class="col-md-6">
+            <div class="resident-card shadow-sm">
+                <div class="avatar-box">
+                    <img src="{{ r.avatar }}" class="w-100 h-100 object-fit-cover">
+                </div>
+
+                <div class="resident-info">
+                    <h6>{{ r.name }}</h6>
+                    <p>Phòng {{ r.room }}</p>
+                    <p>{{ r.phone }}</p>
+                </div>
+
+                <div class="status-check">
+                    <i class="bi bi-check-circle"></i>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12 text-center py-5">
+            <p class="text-muted">Không tìm thấy cư dân nào khớp với từ khóa.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

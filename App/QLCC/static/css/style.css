@@ -239,7 +239,7 @@ body {
 /* Trạng thái: Trống (Xám nhạt) */
 .status-empty {
     background-color: #f3f4f6; /* Màu xám nền */
-    color: #6b7280;            /* Màu chữ xám */
+    color: #6b7280; /* Màu chữ xám */
 }
 
 /* --- NÚT HÀNH ĐỘNG (Sửa/Xóa) --- */
@@ -304,7 +304,7 @@ body {
 /* Badge: Đã thanh toán (Nền xanh, chữ xanh đậm) */
 .status-paid {
     background-color: #d1fae5; /* Xanh lá nhạt */
-    color: #047857;            /* Xanh lá đậm */
+    color: #047857; /* Xanh lá đậm */
     border: 1px solid #a7f3d0;
 }
 
@@ -337,108 +337,378 @@ body {
     box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1); /* Hiệu ứng phát sáng nhẹ */
 }
 
-/* --- CSS CHO TRANG CLIENT HỢP ĐỒNG --- */
-
-/* 1. Style chung cho các Card (Khối trắng) */
-.custom-card {
-    background: #fff;
-    border-radius: 12px;     /* Bo góc mềm mại */
-    padding: 25px 30px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.03); /* Đổ bóng rất nhẹ */
-    border: 1px solid #f0f0f0;
+body {
+    background-color: #f8f9fa; /* Nền xám nhạt toàn trang */
 }
 
-.card-title-text {
-    font-size: 16px;
+.section-title {
+    font-size: 1.1rem;
     font-weight: 600;
     color: #333;
     margin-bottom: 20px;
+    margin-top: 10px;
 }
 
-/* 2. Phần thông tin hợp đồng  */
+/* 2. Card Trắng Sạch (Giống ảnh) */
+.white-card {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #eaeaea; /* Viền siêu mỏng */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02); /* Bóng mờ tinh tế */
+    padding: 30px;
+    margin-bottom: 30px;
+}
+
+/* 3. Phần Thông tin Hợp đồng (Grid 2 cột) */
 .info-group {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
-.info-group label {
-    font-size: 13px;
-    color: #6c757d; /* Màu xám nhạt cho nhãn */
-    margin-bottom: 4px;
-    display: block;
+.info-label {
+    font-size: 0.85rem;
+    color: #6c757d; /* Màu chữ xám của label */
+    margin-bottom: 5px;
 }
 
-.info-group .value {
-    font-size: 15px;
-    color: #212529;
+.info-value {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #212529; /* Màu chữ đen của nội dung */
 }
 
-/* 3. Phần Đơn giá dịch vụ  */
+.text-blue-highlight {
+    color: #2563eb; /* Màu xanh dương cho giá tiền */
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+/* 4. Phần Đơn giá dịch vụ (Dòng màu xanh nhạt) */
 .price-row {
+    background-color: #f0f8ff; /* Màu xanh siêu nhạt (AliceBlue) giống ảnh */
+    border-radius: 8px;
+    padding: 15px 20px;
+    margin-bottom: 15px;
     display: flex;
     justify-content: space-between;
-    padding: 15px 20px;
-    background-color: #f8faff; /* Nền xanh siêu nhạt giống ảnh */
-    border-radius: 8px;
-    margin-bottom: 10px;
-    font-weight: 500;
+    align-items: center;
+}
+
+.price-label {
     color: #495057;
+    font-weight: 500;
 }
 
-.price-value {
+.price-number {
+    color: #000;
     font-weight: 600;
-    color: #333;
 }
 
-/* 4. Phần Quy định*/
-.rule-item {
-    display: flex;
-    align-items: flex-start; /* Căn icon lên trên cùng */
-    gap: 15px;
-    margin-bottom: 20px;
-    padding: 15px;
-    background: #fcfcfc; /* Nền xám rất nhẹ cho mỗi quy định */
+/* 5. Phần Quy định (Icon tròn + Text) */
+.rule-row {
+    background-color: #f8f9fa; /* Nền xám nhạt cho quy định */
     border-radius: 8px;
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: flex-start; /* Căn icon theo dòng đầu */
 }
 
 .rule-icon {
-    min-width: 24px;
-    color: #0d6efd; /* Màu xanh dương chủ đạo */
-    font-size: 18px;
-    margin-top: 2px; /* Căn chỉnh lại xíu cho khớp với dòng đầu */
+    color: #2563eb; /* Icon màu xanh */
+    font-size: 1.2rem;
+    margin-right: 15px;
+    margin-top: -2px;
 }
 
-.rule-title {
-    font-size: 15px;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 3px;
-}
-
-.rule-desc {
-    font-size: 13px;
-    color: #6c757d;
+.rule-content {
+    color: #495057;
+    font-size: 0.95rem;
+    line-height: 1.5;
 }
 
 /* --- CSS CHO TRANG HÓA ĐƠN CLIENT --- */
 
-/* Badge màu nền nhạt */
-.bg-danger-light { background-color: #fee2e2; }
-.bg-success-light { background-color: #d1fae5; }
+body {
+    background-color: #f8f9fa;
+}
 
-/* Các mục chọn thanh toán trong Modal */
-.payment-option {
-    border: 1px solid #e9ecef;
-    padding: 15px;
+.invoice-card {
+    background: #fff;
     border-radius: 12px;
-    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: none;
+    overflow: hidden;
+}
+
+.invoice-header {
+    padding: 25px 30px;
+    border-bottom: 1px solid #f0f0f0;
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.invoice-body {
+    padding: 30px;
+}
+
+/* Các dòng chi tiết tiền */
+.bill-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 25px;
+    border-bottom: 1px dashed #e0e0e0;
+}
+
+.bill-row:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.bill-label {
+    font-weight: 500;
+    color: #555;
+    font-size: 1rem;
+}
+
+.bill-sub {
+    font-size: 0.85rem;
+    color: #888;
+    margin-top: 4px;
+}
+
+.bill-amount {
+    font-weight: 600;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+/* Dòng Tổng cộng (Màu xanh nhạt giống ảnh) */
+.total-row {
+    background-color: #f0f9ff;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+.total-label {
+    font-weight: 700;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.total-amount {
+    font-weight: 700;
+    color: #2563eb;
+    font-size: 1.5rem;
+}
+
+/* Cảnh báo hạn thanh toán (Màu cam nhạt giống ảnh) */
+.warning-box {
+    background-color: #fff7ed;
+    border: 1px solid #ffedd5;
+    border-radius: 8px;
+    padding: 15px 20px;
+    margin-top: 25px;
+    display: flex;
+    align-items: flex-start;
+    color: #c2410c;
+}
+
+.warning-icon {
+    font-size: 1.2rem;
+    margin-right: 15px;
+    margin-top: -2px;
+}
+
+/* Nút thanh toán */
+.btn-pay-now {
+    background-color: #2563eb;
+    color: white;
+    font-weight: 600;
+    padding: 15px;
+    width: 100%;
+    border-radius: 8px;
+    border: none;
+    margin-top: 25px;
+    font-size: 1.1rem;
+    transition: all 0.3s;
+}
+
+.btn-pay-now:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-2px);
+}
+
+/* CSS CHO MODAL THANH TOÁN */
+.payment-option {
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    cursor: pointer;
     transition: all 0.2s;
+    display: flex;
+    align-items: center;
 }
 
 .payment-option:hover {
+    border-color: #2563eb;
+    background-color: #f0f9ff;
+}
+
+.payment-logo {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    margin-right: 15px;
+}
+
+body {
     background-color: #f8f9fa;
-    border-color: #0d6efd;
-    transform: translateY(-2px);
+}
+
+/* Khung tìm kiếm */
+.search-container {
+    background: #fff;
+    border-radius: 12px;
+    padding: 30px;
+    border: 1px solid #eaeaea;
+    margin-bottom: 25px;
+}
+
+.search-input {
+    border-radius: 8px 0 0 8px;
+    border: 1px solid #d1d5db;
+    padding: 12px 20px;
+}
+
+.btn-search {
+    border-radius: 0 8px 8px 0;
+    background-color: #2563eb;
+    padding: 0 25px;
+}
+
+/* Thẻ cư dân */
+.resident-card {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #eaeaea;
+    padding: 20px;
+    transition: all 0.2s;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.resident-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border-color: #2563eb;
+}
+
+.avatar-box {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-right: 15px;
+    background: #f3f4f6;
+}
+
+.resident-info h6 {
+    font-weight: 700;
+    margin-bottom: 2px;
+    color: #1f2937;
+}
+
+.resident-info p {
+    margin-bottom: 0;
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.status-check {
+    position: absolute;
+    right: 20px;
+    color: #10b981; /* Xanh lá tích */
+    font-size: 1.2rem;
+}
+
+body {
+    background-color: #f8f9fa;
+}
+
+.log-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 30px;
+    border: 1px solid #eaeaea;
+}
+
+.table thead th {
+    border-bottom: 1px solid #f3f4f6;
+    color: #6b7280;
+    font-weight: 600;
+    text-transform: none;
+    padding-bottom: 15px;
+}
+
+.table td {
+    padding: 15px 10px;
+    vertical-align: middle;
+    font-size: 0.95rem;
+}
+
+/* Badge Loại (Ra/Vào) */
+.badge-ra {
+    background-color: #fee2e2;
+    color: #ef4444;
+    border-radius: 20px;
+    padding: 5px 12px;
+}
+
+.badge-vao {
+    background-color: #dbeafe;
+    color: #3b82f6;
+    border-radius: 20px;
+    padding: 5px 12px;
+}
+
+/* Dot trang trí bên cạnh Ra/Vào */
+.dot {
+    height: 8px;
+    width: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 6px;
+}
+
+.dot-ra {
+    background-color: #ef4444;
+}
+
+.dot-vao {
+    background-color: #3b82f6;
+}
+
+/* Badge Đối tượng (Cư dân/Khách) */
+.badge-cudan {
+    background-color: #d1fae5;
+    color: #059669;
+    border-radius: 6px;
+    padding: 5px 12px;
+}
+
+.badge-khach {
+    background-color: #fef3c7;
+    color: #d97706;
+    border-radius: 6px;
+    padding: 5px 12px;
 }

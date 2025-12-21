@@ -1,0 +1,55 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Nhật ký ra vào{% endblock %}
+
+{% block navbar %}
+{% include 'layout/baove_navbar.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="log-card shadow-sm">
+        <h5 class="fw-bold mb-1">Nhật ký ra vào</h5>
+        <p class="text-muted small mb-4">Ghi nhận tất cả hoạt động ra vào của cư dân và khách</p>
+
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th width="10%">Mã</th>
+                        <th width="20%">Người</th>
+                        <th width="15%">Phòng</th>
+                        <th width="20%">Thời gian</th>
+                        <th width="15%">Loại</th>
+                        <th width="20%">Trạng thái</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for l in logs %}
+                    <tr>
+                        <td class="text-secondary">{{ l.ma_log }}</td>
+                        <td class="fw-bold text-dark">{{ l.nguoi_ten }}</td>
+                        <td>{{ l.phong }}</td>
+                        <td class="text-muted">{{ l.thoi_gian.strftime('%H:%M - %d/%m/%Y') }}</td>
+                        <td>
+                            {% if l.loai == 'Ra' %}
+                                <span class="badge-ra fw-bold small"><span class="dot dot-ra"></span>Ra</span>
+                            {% else %}
+                                <span class="badge-vao fw-bold small"><span class="dot dot-vao"></span>Vào</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if l.doi_tuong == 'Cư dân' %}
+                                <span class="badge-cudan small">Cư dân</span>
+                            {% else %}
+                                <span class="badge-khach small">Khách</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -14,27 +14,43 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
-
-// Hàm bật chế độ chỉnh sửa
 function enableEditMode() {
-        // 1. Tìm tất cả các ô input trong form
-    var inputs = document.querySelectorAll('.custom-input');
+    // 1. Mở khóa các ô input (bỏ disabled)
+    document.getElementById('priceFields').disabled = false;
 
-        // 2. Xóa thuộc tính disabled (cho phép nhập)
-    inputs.forEach(function(input) {
-        input.removeAttribute('disabled');
-        });
+    // 2. Hiện nút Lưu và Hủy
+    document.getElementById('actionButtons').classList.remove('d-none');
 
-        // 3. Ẩn nút "Chỉnh sửa", Hiện nút "Lưu/Hủy"
-        document.getElementById('btnEdit').classList.add('d-none');
-        document.getElementById('actionButtons').classList.remove('d-none');
-    }
+    // 3. Ẩn nút "Chỉnh sửa" ở trên đi cho đỡ rối
+    document.getElementById('btnEnableEdit').classList.add('d-none');
 
-    // Hàm hủy bỏ (Load lại trang để quay về cũ)
+    // 4. Đổi dòng trạng thái bên dưới
+    document.getElementById('statusFooter').innerHTML = '<small class="text-primary fw-bold"><i class="bi bi-pencil-fill me-1"></i>Đang chỉnh sửa...</small>';
+}
+
 function cancelEditMode() {
-    location.reload();
+    // Reload lại trang để quay về dữ liệu cũ và khóa lại
+    window.location.reload();
 }
-function selectPayment(method) {
-        alert("Bạn đã chọn thanh toán qua: " + method + ". (Chức năng này sẽ hiển thị mã QR hoặc hướng dẫn chi tiết)");
-        // Sau này bạn sẽ redirect sang trang QR hoặc hiện ảnh QR lên đây
+
+window.onload = function () {
+    // Uncomment dòng dưới nếu muốn vừa mở lên là hiện bảng in luôn
+    // window.print();
 }
+
+function selectPayment(type) {
+        // 1. Hiển thị khung chi tiết
+        document.getElementById('paymentDetails').classList.remove('d-none');
+
+        // 2. Ẩn tất cả nội dung con trước
+        document.getElementById('momoContent').classList.add('d-none');
+        document.getElementById('bankContent').classList.add('d-none');
+        document.getElementById('cashContent').classList.add('d-none');
+        document.getElementById('counterContent').classList.add('d-none');
+
+        // 3. Hiện nội dung tương ứng
+        if(type === 'momo') document.getElementById('momoContent').classList.remove('d-none');
+        if(type === 'bank') document.getElementById('bankContent').classList.remove('d-none');
+        if(type === 'cash') document.getElementById('cashContent').classList.remove('d-none');
+        if(type === 'counter') document.getElementById('counterContent').classList.remove('d-none');
+    }
