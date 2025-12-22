@@ -30,62 +30,6 @@ def get_user_by_id(id):
 def load_apartment_by_id(id):
     return Canho.query.get(id)
 
-
-class ReportService:
-    @staticmethod
-    def get_dashboard_data():
-        total_rooms = Canho.query.count()
-        rented_rooms = Canho.query.filter(Canho.status == 'DA_THUE').count()
-        empty_rooms = total_rooms - rented_rooms
-        total_tenants = User.query.filter(User.role == UserRole.USER).count()
-
-        now = datetime.now()
-        current_month = now.month
-        current_year = now.year
-
-        monthly_revenue = db.session.query(
-            func.sum(Chitiethoadon.Total_fee)
-        ).join(
-            Hoadon, Chitiethoadon.hoadon_id == Hoadon.id
-        ).filter(
-            Hoadon.payment_status == 'paid',   # kiểm tra đúng string trong DB
-            func.extract('month', Hoadon.created_date) == current_month,
-            func.extract('year', Hoadon.created_date) == current_year
-        ).scalar()
-
-        monthly_revenue = monthly_revenue or 0
-
-
-        unpaid_bills = Hoadon.query.filter(
-            Hoadon.payment_status == 'unpaid'
-        ).count()
-
-
-        today = datetime.now()
-        next_30_days = today + timedelta(days=30)
-
-        expiring_contracts = Hopdong.query.filter(
-            Hopdong.end_date >= today,
-            Hopdong.end_date <= next_30_days
-        ).order_by(
-            Hopdong.end_date.asc()
-        ).limit(5).all()
-
-        return {
-            "total_rooms": total_rooms,
-            "rented_rooms": rented_rooms,
-            "empty_rooms": empty_rooms,
-            "total_tenants": total_tenants,
-            "monthly_revenue": monthly_revenue,
-            "unpaid_bills": unpaid_bills,
-            "expiring_contracts": expiring_contracts
-        }
-
-
-def get_danh_sach_phong():
-    return Canho.query.all()
-
-
 def get_danh_sach_hop_dong():
     # 1. Lấy tất cả hợp đồng, sắp xếp cái mới nhất lên đầu (id giảm dần)
     ds_hopdong = Hopdong.query.order_by(Hopdong.id.desc()).all()

@@ -1,11 +1,11 @@
+from datetime import datetime, timedelta
+
 from flask import render_template, request, redirect, url_for, session, flash
 from flask_login import login_user, current_user, logout_user, login_required
+from sqlalchemy import func
+
 from QLCC import models
-from QLCC import app, dao, db, login_manager
-from QLCC.dao import ReportService, get_danh_sach_phong, get_danh_sach_hop_dong, get_danh_sach_hoa_don, \
-    get_chi_tiet_hoa_don_by_id, \
-    delete_noiquy, add_noiquy, update_gia_tien, get_cauhinh, get_ds_noiquy, get_hopdong_cua_user, \
-    get_hoadon_moi_nhat_cua_user, get_lich_su_thanh_toan, search_cu_dan, get_all_logs
+from QLCC import app, dao, db, login_manager, dao
 
 
 from QLCC.models import UserRole, UserRole, Canho, Hopdong, Hoadon, User, Chitiethoadon, Suco
@@ -91,19 +91,66 @@ def apartment_details(id):
 
 @app.route('/management/tong-quan')
 def tong_quan():
-    # Logic lấy dữ liệu phải nằm ở đây
-    dashboard_data = ReportService.get_dashboard_data()
+    # 1. Tổng số phòng
+    tong_phong = Canho.query.count()
 
-    return render_template('/management/tongquan.html',
-                        p=current_user,
-                        UserRole=UserRole,
-                        active_page='overview',
-                        **dashboard_data)
+    # 2. Phòng đã thuê / trống
+    phong_da_thue = Canho.query.filter(Canho.status == "Đã thuê").count()
+    phong_trong = Canho.query.filter(Canho.status == "Còn trống").count()
+
+    # 3. Tổng số người thuê (user có hợp đồng)
+    tong_nguoi_thue = (
+        db.session.query(User)
+        .join(Hopdong, Hopdong.client_id == User.id)
+        .distinct()
+        .count()
+    )
+
+    # 4. Doanh thu tháng hiện tại
+    now = datetime.now()
+    doanh_thu = (
+                    db.session.query(func.sum(Chitiethoadon.Total_fee))
+                    .join(Hoadon, Hoadon.id == Chitiethoadon.hoadon_id)
+                    .filter(func.extract('month', Hoadon.created_date) == now.month)
+                    .filter(func.extract('year', Hoadon.created_date) == now.year)
+                    .scalar()
+                ) or 0
+
+    # 5. Hóa đơn chưa thanh toán
+    hoa_don_chua_tt = Hoadon.query.filter(
+        Hoadon.payment_status == "Chưa thanh toán"
+    ).count()
+
+    # 6. Hợp đồng còn hạn (trong 360 ngày tới)
+    today = datetime.now().date()
+    limit_date = today + timedelta(days=360)
+
+    hopdong_con_han = (
+        Hopdong.query
+        .filter(Hopdong.end_date >= today)
+        .filter(Hopdong.end_date <= limit_date)
+        .order_by(Hopdong.end_date)
+        .all()
+    )
+
+    for hd in hopdong_con_han:
+        hd.so_ngay_con_lai = (hd.end_date.date() - today).days
+
+    return render_template(
+        'management/tongquan.html',
+        tong_phong=tong_phong,
+        phong_da_thue=phong_da_thue,
+        phong_trong=phong_trong,
+        tong_nguoi_thue=tong_nguoi_thue,
+        doanh_thu=doanh_thu,
+        hoa_don_chua_tt=hoa_don_chua_tt,
+        hopdong_con_han=hopdong_con_han
+    )
 
 @app.route('/management/phong')
 def quanly_phong():
 
-    ds_phong = get_danh_sach_phong()
+    ds_phong = Canho.query.all()
 
     return render_template('management/quanlyphong.html',
                            list_phong=ds_phong,
@@ -126,14 +173,14 @@ def delete_apartment(id):
 @app.route('/management/hop-dong')
 def quanly_hopdong():
     # Lấy danh sách hợp đồng đã xử lý logic
-    data = get_danh_sach_hop_dong()
+    data = dao.get_danh_sach_hop_dong()
 
     return render_template('management/hopdong.html',
                            list_hopdong=data,
                            active_page='contracts')
 @app.route('/management/hoa-don')
 def quanly_hoadon():
-    data = get_danh_sach_hoa_don()
+    data = dao.get_danh_sach_hoa_don()
 
     return render_template('management/hoadon.html',
                                list_hoadon=data,
@@ -142,7 +189,7 @@ def quanly_hoadon():
 @app.route('/invoice/print/<int:hoadon_id>')
 def in_hoa_don(hoadon_id):
     # Lấy dữ liệu chi tiết
-    invoice_data = get_chi_tiet_hoa_don_by_id(hoadon_id)
+    invoice_data = dao.get_chi_tiet_hoa_don_by_id(hoadon_id)
     if not invoice_data:
         return "Không tìm thấy hóa đơn", 404
     return render_template('management/mau_in_hoa_don.html', info=invoice_data)
@@ -155,18 +202,18 @@ def quanly_caidat():
         e = request.form.get('electric_fee')
         w = request.form.get('water_fee')
         i = request.form.get('internet_fee')
-        update_gia_tien(e, w, i)
+        dao.update_gia_tien(e, w, i)
         return redirect(url_for('quanly_caidat'))
 
     # 2. Xử lý THÊM QUY ĐỊNH
     if request.method == 'POST' and 'btn_add_rule' in request.form:
         content = request.form.get('new_rule_content')
-        add_noiquy(content)
+        dao.add_noiquy(content)
         return redirect(url_for('quanly_caidat'))
 
     # GET: Lấy dữ liệu hiển thị
-    setting = get_cauhinh()
-    rules = get_ds_noiquy()
+    setting = dao.get_cauhinh()
+    rules = dao.get_ds_noiquy()
 
     # Kiểm tra nếu setting chưa có (lần đầu chạy) thì tạo object giả để không lỗi HTML
     if not setting:
@@ -184,18 +231,37 @@ def quanly_caidat():
 
 @app.route('/management/cai-dat/delete-rule/<int:id>')
 def xoa_quy_dinh(id):
-    delete_noiquy(id)
+    dao.delete_noiquy(id)
     return redirect(url_for('quanly_caidat'))
+
+@app.route('/management/canho/<int:canho_id>/edit', methods=['GET', 'POST'])
+def edit_canho(canho_id):
+    canho = Canho.query.get_or_404(canho_id)
+
+    if request.method == 'POST':
+        canho.name = request.form['name']
+        canho.price = request.form['price']
+        canho.acreage = request.form['acreage']
+        canho.capacity = request.form['capacity']
+        canho.status = request.form['status']
+
+        db.session.commit()
+        return redirect(url_for('quanly_phong'))
+
+    return render_template(
+        'management/edit_canho.html',
+        canho=canho
+    )
 
 
 @app.route('/client/hop-dong')
 @login_required
 def client_thongtin():
     # 1. Lấy Hợp đồng của user đang đăng nhập
-    my_contract = get_hopdong_cua_user(current_user.id)
+    my_contract = dao.get_hopdong_cua_user(current_user.id)
 
     # 2. Lấy Giá tiền (Cấu hình)
-    setting = get_cauhinh()
+    setting = dao.get_cauhinh()
     # Nếu chưa có cấu hình thì tạo object giả để không lỗi giao diện
     if not setting:
         class Fake: electric_fee = 0; water_fee = 0; internet_fee = 0
@@ -203,7 +269,7 @@ def client_thongtin():
         setting = Fake()
 
     # 3. Lấy Danh sách Nội quy (Từng dòng)
-    rules = get_ds_noiquy()
+    rules = dao.get_ds_noiquy()
 
     return render_template('client/hopdong.html',
                            contract=my_contract,
@@ -212,11 +278,12 @@ def client_thongtin():
                            active_page='client_contract')
 
 
+
 @app.route('/client/hoa-don')
 @login_required
 def client_hoadon():
     # Lấy hóa đơn mới nhất
-    invoice = get_hoadon_moi_nhat_cua_user(current_user.id)
+    invoice = dao.get_hoadon_moi_nhat_cua_user(current_user.id)
 
     return render_template('client/hoadon_thang.html',
                            invoice=invoice,
@@ -225,7 +292,7 @@ def client_hoadon():
 @login_required
 def client_lichsu():
     # Lấy dữ liệu
-    history_list = get_lich_su_thanh_toan(current_user.id)
+    history_list = dao.get_lich_su_thanh_toan(current_user.id)
 
     return render_template('client/lich_su.html',
                            history=history_list,
@@ -261,7 +328,7 @@ def security_soatve():
     kw = request.args.get('keyword', '')
 
     # Gọi DAO để lấy danh sách cư dân dựa trên từ khóa
-    residents = search_cu_dan(kw)
+    residents = dao.search_cu_dan(kw)
 
     return render_template('security/soat_ve.html',
                            residents=residents,
@@ -271,7 +338,7 @@ def security_soatve():
 @app.route('/security/nhat-ky')
 @login_required
 def security_nhatky():
-    logs = get_all_logs()
+    logs = dao.get_all_logs()
     return render_template('security/ra_vao.html',
                            logs=logs,
                            active_page='sec_logs')

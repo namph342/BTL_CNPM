@@ -1,7 +1,7 @@
 {% extends 'layout/base.html' %}
 
 {% block navbar %}
-    {% include 'layout/quanly_navbar.html' %}
+{% include 'layout/quanly_navbar.html' %}
 {% endblock %}
 
 {% block title %}Trang tổng quan{% endblock %}
@@ -17,7 +17,8 @@
             </div>
             <div class="card-info">
                 <div class="card-title">Tổng số phòng</div>
-                <div class="card-number">24 phòng</div>
+                <div class="card-number">{{ tong_phong }} phòng</div>
+
             </div>
         </div>
 
@@ -27,7 +28,7 @@
             </div>
             <div class="card-info">
                 <div class="card-title">Phòng đã thuê</div>
-                 <div class="card-number">18 phòng</div>
+                <div class="card-number">{{ phong_da_thue }} phòng</div>
             </div>
         </div>
 
@@ -37,7 +38,7 @@
             </div>
             <div class="card-info">
                 <div class="card-title">Phòng trống</div>
-                 <div class="card-number">6 phòng</div>
+                <div class="card-number">{{ phong_trong }} phòng</div>
             </div>
         </div>
 
@@ -47,7 +48,7 @@
             </div>
             <div class="card-info">
                 <div class="card-title">Tổng số người thuê</div>
-                 <div class="card-number">58 người</div>
+                <div class="card-number">{{ tong_nguoi_thue }} người</div>
             </div>
         </div>
 
@@ -57,7 +58,9 @@
             </div>
             <div class="card-info">
                 <div class="card-title">Doanh thu tháng</div>
-                 <div class="card-number text-green">86,500,000 đ</div>
+                <div class="card-number text-green">
+                    {{ "{:,.0f}".format(doanh_thu) }} đ
+                </div>
             </div>
         </div>
 
@@ -67,39 +70,39 @@
             </div>
             <div class="card-info">
                 <div class="card-title">Chưa thanh toán</div>
-                 <div class="card-number text-red">5 hóa đơn</div>
+                <div class="card-number text-red">
+                    {{ hoa_don_chua_tt }} hóa đơn
+                </div>
             </div>
         </div>
     </div>
 
     <div class="contracts-section">
-        <h4 class="section-title mb-4">Hợp đồng sắp hết hạn</h4>
+        <h4 class="section-title mb-4">Hợp đồng còn hạn</h4>
         <div class="contracts-list">
 
-            <div class="contract-card">
-                <div class="contract-info">
-                    <div class="tenant-name">Nguyễn Văn A - Phòng A101</div>
-                    <div class="expiry-date">Hết hạn: 31/12/2025</div>
+    {% if hopdong_con_han %}
+        {% for hd in hopdong_con_han %}
+        <div class="contract-card">
+            <div class="contract-info">
+                <div class="tenant-name">
+                    {{ hd.User.name }} - Phòng {{ hd.Canho.name }}
                 </div>
-                <div class="days-left-badge">Còn 20 ngày</div>
+                <div class="expiry-date">
+                    Hết hạn: {{ hd.end_date.strftime('%d/%m/%Y') }}
+                </div>
             </div>
 
-            <div class="contract-card">
-                <div class="contract-info">
-                    <div class="tenant-name">Trần Thị B - Phòng A102</div>
-                    <div class="expiry-date">Hết hạn: 15/01/2026</div>
-                </div>
-                <div class="days-left-badge">Còn 35 ngày</div>
+            <div class="days-left-badge">
+                Còn {{ hd.so_ngay_con_lai }} ngày
             </div>
-             <div class="contract-card">
-                <div class="contract-info">
-                    <div class="tenant-name">Hoàng Văn C - Phòng C301</div>
-                    <div class="expiry-date">Hết hạn: 20/01/2026</div>
-                </div>
-                <div class="days-left-badge">Còn 40 ngày</div>
-            </div>
-
         </div>
+        {% endfor %}
+    {% else %}
+        <p class="text-muted">Không có hợp đồng sắp hết hạn</p>
+    {% endif %}
+
+</div>
     </div>
 
 </div>

@@ -190,8 +190,7 @@ if __name__ == '__main__':
 
         list_phong = Canho.query.all()
 
-        if list_phong and u1:
-
+        if list_phong:
 
             # D. TẠO SỰ CỐ
             cac_loi = [
@@ -208,7 +207,7 @@ if __name__ == '__main__':
                     name=loi_random[0],
                     description=loi_random[1],
                     status=random.choice(['Chưa xử lý', 'Đang xử lý']),
-                    client_id=u1.id
+                    client_id=client.id
                 )
                 db.session.add(su_co)
 

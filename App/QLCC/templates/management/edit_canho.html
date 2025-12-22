@@ -1,0 +1,52 @@
+{% extends 'layout/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h4>Chỉnh sửa căn hộ</h4>
+
+    <form method="post">
+        <div class="mb-3">
+            <label>Mã căn</label>
+            <input type="text" name="name" class="form-control"
+                   value="{{ canho.name }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Giá thuê</label>
+            <input type="number" name="price" class="form-control"
+                   value="{{ canho.price }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Diện tích (m²)</label>
+            <input type="number" name="acreage" class="form-control"
+                   value="{{ canho.acreage }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Sức chứa</label>
+            <input type="number" name="capacity" class="form-control"
+                   value="{{ canho.capacity }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Tình trạng</label>
+            <select name="status" class="form-select">
+                <option value="Còn trống"
+                    {% if canho.status == "Còn trống" %}selected{% endif %}>
+                    Còn trống
+                </option>
+                <option value="Đã thuê"
+                    {% if canho.status == "Đã thuê" %}selected{% endif %}>
+                    Đã thuê
+                </option>
+            </select>
+        </div>
+
+        <button class="btn btn-primary">Lưu thay đổi</button>
+        <a href="{{ url_for('quanly_phong') }}" class="btn btn-secondary">
+            Quay lại
+        </a>
+    </form>
+</div>
+{% endblock %}
