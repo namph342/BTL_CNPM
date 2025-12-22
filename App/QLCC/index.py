@@ -170,6 +170,26 @@ def delete_apartment(id):
     flash("Xóa căn hộ thành công", "success")
     return redirect(url_for("quanly_phong"))
 
+@app.route('/management/phong/<int:canho_id>/edit', methods=['GET', 'POST'])
+def edit_canho(canho_id):
+    canho = Canho.query.get_or_404(canho_id)
+
+    if request.method == 'POST':
+        canho.name = request.form['name']
+        canho.price = request.form['price']
+        canho.acreage = request.form['acreage']
+        canho.capacity = request.form['capacity']
+        canho.status = request.form['status']
+
+        db.session.commit()
+        return redirect(url_for('quanly_phong'))
+
+    return render_template(
+        'management/edit_canho.html',
+        canho=canho
+    )
+
+
 @app.route('/management/hop-dong')
 def quanly_hopdong():
     # Lấy danh sách hợp đồng đã xử lý logic
@@ -233,26 +253,6 @@ def quanly_caidat():
 def xoa_quy_dinh(id):
     dao.delete_noiquy(id)
     return redirect(url_for('quanly_caidat'))
-
-@app.route('/management/canho/<int:canho_id>/edit', methods=['GET', 'POST'])
-def edit_canho(canho_id):
-    canho = Canho.query.get_or_404(canho_id)
-
-    if request.method == 'POST':
-        canho.name = request.form['name']
-        canho.price = request.form['price']
-        canho.acreage = request.form['acreage']
-        canho.capacity = request.form['capacity']
-        canho.status = request.form['status']
-
-        db.session.commit()
-        return redirect(url_for('quanly_phong'))
-
-    return render_template(
-        'management/edit_canho.html',
-        canho=canho
-    )
-
 
 @app.route('/client/hop-dong')
 @login_required

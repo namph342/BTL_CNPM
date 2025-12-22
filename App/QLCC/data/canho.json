@@ -2,6 +2,7 @@
   {
     "id": 1,
     "name": 101,
+    "room_type": "1PN",
     "price": 3500000,
     "acreage": 25,
     "capacity": 3,
@@ -11,6 +12,7 @@
   {
     "id": 2,
     "name": 102,
+    "room_type": "1PN",
     "price": 3600000,
     "acreage": 25,
     "capacity": 3,
@@ -20,6 +22,7 @@
   {
     "id": 3,
     "name": 103,
+    "room_type": "2PN",
     "price": 3800000,
     "acreage": 25,
     "capacity": 4,
@@ -29,6 +32,7 @@
   {
     "id": 4,
     "name": 104,
+    "room_type": "2PN",
     "price": 4000000,
     "acreage": 25,
     "capacity": 4,
@@ -38,6 +42,7 @@
   {
     "id": 5,
     "name": 201,
+    "room_type": "2PN",
     "price": 4200000,
     "acreage": 32,
     "capacity": 4,
@@ -47,6 +52,7 @@
   {
     "id": 6,
     "name": 202,
+    "room_type": "2PN",
     "price": 4500000,
     "acreage": 32,
     "capacity": 4,
@@ -56,6 +62,7 @@
   {
     "id": 7,
     "name": 302,
+    "room_type": "2PN",
     "price": 4700000,
     "acreage": 36,
     "capacity": 4,
@@ -65,6 +72,7 @@
   {
     "id": 8,
     "name": 304,
+    "room_type": "2PN",
     "price": 5000000,
     "acreage": 36,
     "capacity": 4,

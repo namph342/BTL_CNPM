@@ -9,6 +9,25 @@
 {% block content %}
 <div class="container main-dashboard mt-4">
 
+    <div class="row">
+        <div class="col-md-4 mx-auto">
+            <h4 class="text text-info text-center">Sơ đồ thuê phòng</h4>
+            <canvas id="phongChart"></canvas>
+
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+            <script>
+                window.phongData = {
+                    daThue: {{ phong_da_thue }},
+                    trong: {{ phong_trong }}
+                }
+            </script>
+
+            <script src="{{ url_for('static', filename='js/style.js') }}"></script>
+        </div>
+
+    </div>
+
     <div class="stats-grid mb-5">
 
         <div class="stat-card">
@@ -81,28 +100,28 @@
         <h4 class="section-title mb-4">Hợp đồng còn hạn</h4>
         <div class="contracts-list">
 
-    {% if hopdong_con_han %}
-        {% for hd in hopdong_con_han %}
-        <div class="contract-card">
-            <div class="contract-info">
-                <div class="tenant-name">
-                    {{ hd.User.name }} - Phòng {{ hd.Canho.name }}
+            {% if hopdong_con_han %}
+            {% for hd in hopdong_con_han %}
+            <div class="contract-card">
+                <div class="contract-info">
+                    <div class="tenant-name">
+                        {{ hd.User.name }} - Phòng {{ hd.Canho.name }}
+                    </div>
+                    <div class="expiry-date">
+                        Hết hạn: {{ hd.end_date.strftime('%d/%m/%Y') }}
+                    </div>
                 </div>
-                <div class="expiry-date">
-                    Hết hạn: {{ hd.end_date.strftime('%d/%m/%Y') }}
-                </div>
-            </div>
 
-            <div class="days-left-badge">
-                Còn {{ hd.so_ngay_con_lai }} ngày
+                <div class="days-left-badge">
+                    Còn {{ hd.so_ngay_con_lai }} ngày
+                </div>
             </div>
+            {% endfor %}
+            {% else %}
+            <p class="text-muted">Không có hợp đồng sắp hết hạn</p>
+            {% endif %}
+
         </div>
-        {% endfor %}
-    {% else %}
-        <p class="text-muted">Không có hợp đồng sắp hết hạn</p>
-    {% endif %}
-
-</div>
     </div>
 
 </div>

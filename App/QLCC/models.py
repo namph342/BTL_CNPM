@@ -20,6 +20,7 @@ class Base(db.Model):
 
 class Canho(Base):
     name = db.Column(String(100), nullable=False)
+    room_type = db.Column(String(50), nullable=False)
     price = db.Column(Float, nullable=False, default=0)
     acreage = db.Column(Integer, nullable=False)
     capacity = db.Column(Integer, nullable=False)
@@ -35,6 +36,7 @@ class Hopdong(Base):
     status = db.Column(String(50), nullable=False)
     client_id = db.Column(Integer, ForeignKey('user.id'), nullable=False)
     room_id = db.Column(Integer, ForeignKey('canho.id'), nullable=False)
+
     hoadon = relationship('Hoadon', backref="Hopdong", lazy=True)
 
 

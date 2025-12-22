@@ -54,3 +54,21 @@ function selectPayment(type) {
         if(type === 'cash') document.getElementById('cashContent').classList.remove('d-none');
         if(type === 'counter') document.getElementById('counterContent').classList.remove('d-none');
     }
+
+document.addEventListener("DOMContentLoaded", function () {
+    if (!window.phongData) return;
+
+    const ctx = document.getElementById('phongChart');
+    if (!ctx) return;
+
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Đã thuê', 'Còn trống'],
+            datasets: [{
+                data: [phongData.daThue, phongData.trong],
+                backgroundColor: ['#dc3545', '#198754']
+            }]
+        }
+    });
+});
