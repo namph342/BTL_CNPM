@@ -7,6 +7,17 @@
 {% block title %}Trang quản lý phòng{% endblock %}
 
 {% block content %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
 <div class="container mt-4">
 
     <div class="table-container">
@@ -49,9 +60,14 @@
                     <button class="btn btn-sm btn-outline-primary">
                         <i class="bi bi-pencil-square"></i>
                     </button>
-                    <button class="btn btn-sm btn-outline-danger">
-                        <i class="bi bi-trash"></i>
-                    </button>
+                    <form action="{{ url_for('delete_apartment', id=p.id) }}"
+          method="post"
+          style="display:inline"
+          onsubmit="return confirm('Bạn có chắc muốn xóa căn này không?');">
+        <button type="submit" class="btn btn-sm btn-outline-danger">
+            <i class="bi bi-trash"></i>
+        </button>
+    </form>
                 </td>
             </tr>
             {% endfor %}

@@ -118,85 +118,80 @@ if __name__ == '__main__':
         import hashlib
 
         password = hashlib.md5("123".encode('utf-8')).hexdigest()
-        u1 = User(name="client", username='client', password=password)
-        u2 = User(name="management", username='management', password=password, role=UserRole.ADMIN)
-        u3 = User(name="security", username='security', password=password, role=UserRole.SECURITY)
-        db.session.add_all([u1, u2, u3])
+        u1 = User(name="management", username='management', password=password, role=UserRole.ADMIN)
+        u2 = User(name="security", username='security', password=password, role=UserRole.SECURITY)
+        c1 = User(name="Nguyễn Văn A", username='user1', password=password)
+        c2 = User(name="Trần Thị B", username='user2', password=password)
+        c3 = User(name="Lê Văn C", username='user3', password=password)
+        c4 = User(name="Bui Van D", username='user4', password=password)
+        db.session.add_all([u1, u2, c1, c2, c3, c4])
+        db.session.commit()
+
+        clients = [c1, c2, c3, c4]
+        phong_da_thue = Canho.query.filter(Canho.status == "Đã thuê").all()
+
+        for client, phong in zip(clients, phong_da_thue):
+            start = datetime.now() - timedelta(days=30)
+            end = datetime.now() + timedelta(days=180)
+
+            hd = Hopdong(
+                start_date=start,
+                end_date=end,
+                status="Đang thuê",
+                client_id=client.id,
+                room_id=phong.id
+            )
+
+            db.session.add(hd)
+
+        db.session.commit()
+
+        for hd in Hopdong.query.filter(Hopdong.status == "Đang thuê").all():
+            phong = hd.Canho
+
+            current_time_str = datetime.now().strftime('%m%Y')
+            ma_hoa_don = f"INV-{phong.name}-{current_time_str}"
+
+            da_thanh_toan = random.choice([True, False])
+            trang_thai_hd = "Đã thanh toán" if da_thanh_toan else "Chưa thanh toán"
+
+            hoa_don = Hoadon(
+                name=ma_hoa_don,
+                created_date=datetime.now(),
+                payment_status=trang_thai_hd,
+                hopdong_id=hd.id
+            )
+
+            db.session.add(hoa_don)
+            db.session.flush()
+
+            e_old = random.randint(100, 500)
+            e_new = e_old + random.randint(30, 100)
+            w_old = random.randint(50, 200)
+            w_new = w_old + random.randint(5, 20)
+
+            tien_dien = (e_new - e_old) * 3500
+            tien_nuoc = (w_new - w_old) * 15000
+            tong_tien = tien_dien + tien_nuoc + int(phong.price)
+
+            chi_tiet = Chitiethoadon(
+                name=f"DT-{phong.name}-{current_time_str}",
+                apartment_patment="Chuyển khoản" if da_thanh_toan else "Tiền mặt",
+                electric_old=e_old, electric_new=e_new,
+                water_old=w_old, water_new=w_new,
+                electric_fee=3500, water_fee=15000,
+                Total_fee=tong_tien,
+                hoadon_id=hoa_don.id
+            )
+
+            db.session.add(chi_tiet)
+
         db.session.commit()
 
         list_phong = Canho.query.all()
 
         if list_phong and u1:
-            for i, phong in enumerate(list_phong):
 
-                # 1. RANDOM NGÀY THÁNG HỢP ĐỒNG
-                if i % 3 == 0:
-                    # Sắp hết hạn
-                    start = datetime.now() - timedelta(days=340)
-                    end = datetime.now() + timedelta(days=20)
-                else:
-                    # Còn hạn dài
-                    start = datetime.now() - timedelta(days=30)
-                    end = datetime.now() + timedelta(days=180)
-
-                # A. TẠO HỢP ĐỒNG (Lưu ý: Bảng Hopdong ko có cột name nên ko thêm mã ở đây đc)
-                hd = Hopdong(
-                    start_date=start,
-                    end_date=end,
-                    status='Đang thuê',
-                    client_id=u1.id,
-                    room_id=phong.id
-                )
-
-                phong.status = 'Đã thuê'
-                db.session.add(hd)
-                db.session.commit()
-
-                # 2. TẠO MÃ HÓA ĐƠN & MÃ CHI TIẾT (Thay đổi ở đây)
-                # Lấy tháng năm hiện tại (Ví dụ: 122025)
-                current_time_str = datetime.now().strftime('%m%Y')
-
-                # Tạo mã: INV-[TênPhòng]-[ThángNăm] (Ví dụ: INV-A101-122025)
-                ma_hoa_don = f"INV-{phong.name}-{current_time_str}"
-
-                # Tạo mã chi tiết: DT-[TênPhòng]-[ThángNăm] (Ví dụ: DT-A101-122025)
-                ma_chi_tiet = f"DT-{phong.name}-{current_time_str}"
-
-                # Random trạng thái
-                da_thanh_toan = random.choice([True, False])
-                trang_thai_hd = 'Đã thanh toán' if da_thanh_toan else 'Chưa thanh toán'
-
-                # B. TẠO HÓA ĐƠN VỚI MÃ MỚI
-                hoa_don = Hoadon(
-                    name=ma_hoa_don,  # <-- Đã sửa thành mã
-                    created_date=datetime.now(),
-                    payment_status=trang_thai_hd,
-                    hopdong_id=hd.id
-                )
-                db.session.add(hoa_don)
-                db.session.commit()
-
-                # 3. RANDOM SỐ LIỆU ĐIỆN NƯỚC
-                e_old = random.randint(100, 500)
-                e_new = e_old + random.randint(30, 100)
-                w_old = random.randint(50, 200)
-                w_new = w_old + random.randint(5, 20)
-
-                tien_dien = (e_new - e_old) * 3500
-                tien_nuoc = (w_new - w_old) * 15000
-                tong_tien = tien_dien + tien_nuoc + int(phong.price)
-
-                # C. TẠO CHI TIẾT VỚI MÃ MỚI
-                chi_tiet = Chitiethoadon(
-                    name=ma_chi_tiet,  # <-- Đã sửa thành mã
-                    apartment_patment="Chuyển khoản" if da_thanh_toan else "Tiền mặt",
-                    electric_old=e_old, electric_new=e_new,
-                    water_old=w_old, water_new=w_new,
-                    electric_fee=3500, water_fee=15000,
-                    Total_fee=tong_tien,
-                    hoadon_id=hoa_don.id
-                )
-                db.session.add(chi_tiet)
 
             # D. TẠO SỰ CỐ
             cac_loi = [

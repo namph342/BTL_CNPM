@@ -108,6 +108,21 @@ def quanly_phong():
     return render_template('management/quanlyphong.html',
                            list_phong=ds_phong,
                            active_page='rooms')
+
+@app.route("/management/phong/delete/<int:id>", methods=["POST"])
+def delete_apartment(id):
+    phong = Canho.query.get_or_404(id)
+
+    if phong.hopdong:  # còn hợp đồng
+        flash("Không thể xóa căn hộ đang có hợp đồng!", "danger")
+        return redirect(url_for("quanly_phong"))
+
+    db.session.delete(phong)
+    db.session.commit()
+
+    flash("Xóa căn hộ thành công", "success")
+    return redirect(url_for("quanly_phong"))
+
 @app.route('/management/hop-dong')
 def quanly_hopdong():
     # Lấy danh sách hợp đồng đã xử lý logic
