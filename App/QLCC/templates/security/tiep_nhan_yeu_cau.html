@@ -7,5 +7,40 @@
 {% endblock %}
 
 {% block content %}
+<div class="container mt-4 mb-5" style="max-width: 900px;">
+    <h4 class="fw-bold mb-4">Tiếp nhận yêu cầu từ cư dân</h4>
 
+    {% for sc in list_suco %}
+    <div class="card shadow-sm border-0 rounded-4 mb-3 p-4">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+                <h5 class="fw-bold text-primary mb-1">{{ sc.name }}</h5>
+                <span class="text-muted small">Người gửi: <strong>{{ sc.User.name }}</strong></span>
+            </div>
+
+            <span class="badge {% if sc.status == 'Chờ tiếp nhận' %}bg-warning text-dark{% elif sc.status == 'Đang xử lý' %}bg-info text-white{% else %}bg-success{% endif %} px-3 py-2">
+                {{ sc.status }}
+            </span>
+        </div>
+
+        <p class="bg-light p-3 rounded border text-dark">{{ sc.description }}</p>
+
+        <div class="d-flex gap-2 mt-2">
+            {% if sc.status == 'Chờ tiếp nhận' %}
+            <a href="{{ url_for('security_update_suco', id=sc.id, status='Đang xử lý') }}"
+               class="btn btn-primary px-4 fw-bold">
+                Bắt đầu xử lý
+            </a>
+            {% endif %}
+
+            {% if sc.status != 'Đã xử lý' %}
+            <a href="{{ url_for('security_update_suco', id=sc.id, status='Đã xử lý') }}"
+               class="btn btn-success px-4 fw-bold">
+                Đã xử lý xong
+            </a>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
 {% endblock %}

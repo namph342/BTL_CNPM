@@ -78,12 +78,13 @@ class Chitiethoadon(Base):
     hoadon_id = Column(Integer, ForeignKey('hoadon.id'), nullable=False)
 
 
-class Suco(Base):
-    name = db.Column(String(100), nullable=False)
-    description = db.Column(Text, nullable=False)
-    created_date = db.Column(DateTime, nullable=False, default=datetime.now)
-    status = db.Column(String(50), nullable=False)
-    client_id = db.Column(Integer, ForeignKey('user.id'), nullable=False)
+class Suco(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(100), nullable=False) # Loại sự cố
+    description = db.Column(db.Text, nullable=False) # Chi tiết
+    status = db.Column(db.String(50), default="Chờ tiếp nhận")
+    created_date = db.Column(db.DateTime, default=datetime.now)
+    client_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 
 class CauHinh(Base):

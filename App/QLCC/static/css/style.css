@@ -261,105 +261,7 @@ body {
     color: var(--red-color);
 }
 
-/* --- BỔ SUNG CSS CHO TRANG HỢP ĐỒNG --- */
-
-/* Tiêu đề section */
-.section-title {
-    font-weight: 600;
-    color: #333;
-    margin: 0;
-}
-
-/* Badge trạng thái chung */
-.status-badge {
-    padding: 6px 16px;
-    border-radius: 50px; /* Bo tròn mạnh để ra hình viên thuốc */
-    font-size: 13px;
-    font-weight: 500;
-    display: inline-block;
-}
-
-/* Màu đỏ nhạt cho "Sắp hết hạn" */
-.status-warning {
-    background-color: #ffe5e5;
-    color: #dc3545;
-    border: 1px solid #f8d7da;
-}
-
-/* Màu xanh nhạt cho "Còn hạn" */
-.status-success {
-    background-color: #d1e7dd;
-    color: #0f5132;
-    border: 1px solid #badbcc;
-}
-
-/* Chỉnh lại font size bảng cho gọn */
-.custom-table td, .custom-table th {
-    font-size: 14px;
-    padding: 18px 12px;
-}
-
-/* --- CSS CHO TRANG HÓA ĐƠN --- */
-
-/* Badge: Đã thanh toán (Nền xanh, chữ xanh đậm) */
-.status-paid {
-    background-color: #d1fae5; /* Xanh lá nhạt */
-    color: #047857; /* Xanh lá đậm */
-    border: 1px solid #a7f3d0;
-}
-
-/* Badge: Chưa thanh toán (Nền đỏ, chữ đỏ đậm) */
-.status-unpaid {
-    background-color: #fee2e2;
-    color: #b91c1c;
-    border: 1px solid #fecaca;
-}
-
-/* Căn chỉnh lại cột Tổng tiền */
-.custom-table td:nth-child(8) {
-    font-family: 'Segoe UI', sans-serif;
-    letter-spacing: 0.5px;
-}
-
-
-/* Style cho ô input khi bị khóa (Chế độ xem) */
-.custom-input:disabled {
-    background-color: #e9ecef; /* Màu xám nhạt */
-    color: #495057;
-    border: 1px solid transparent; /* Ẩn viền đi cho giống văn bản */
-    cursor: default; /* Con trỏ chuột bình thường */
-}
-
-/* Style cho ô input khi đang sửa (Chế độ sửa) */
-.custom-input:not(:disabled) {
-    background-color: #fff;
-    border: 1px solid #ced4da;
-    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1); /* Hiệu ứng phát sáng nhẹ */
-}
-
-body {
-    background-color: #f8f9fa; /* Nền xám nhạt toàn trang */
-}
-
-.section-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 20px;
-    margin-top: 10px;
-}
-
-/* 2. Card Trắng Sạch (Giống ảnh) */
-.white-card {
-    background: #fff;
-    border-radius: 12px;
-    border: 1px solid #eaeaea; /* Viền siêu mỏng */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02); /* Bóng mờ tinh tế */
-    padding: 30px;
-    margin-bottom: 30px;
-}
-
-/* 3. Phần Thông tin Hợp đồng (Grid 2 cột) */
+/* Phần Thông tin Hợp đồng (Grid 2 cột) */
 .info-group {
     margin-bottom: 25px;
 }
@@ -382,7 +284,7 @@ body {
     font-size: 1.1rem;
 }
 
-/* 4. Phần Đơn giá dịch vụ (Dòng màu xanh nhạt) */
+/*Phần Đơn giá dịch vụ (Dòng màu xanh nhạt) */
 .price-row {
     background-color: #f0f8ff; /* Màu xanh siêu nhạt (AliceBlue) giống ảnh */
     border-radius: 8px;
@@ -403,7 +305,7 @@ body {
     font-weight: 600;
 }
 
-/* 5. Phần Quy định (Icon tròn + Text) */
+/* Phần Quy định (Icon tròn + Text) */
 .rule-row {
     background-color: #f8f9fa; /* Nền xám nhạt cho quy định */
     border-radius: 8px;
@@ -711,4 +613,39 @@ body {
     color: #d97706;
     border-radius: 6px;
     padding: 5px 12px;
+}
+
+/* Ép Badge hiển thị rõ chữ và icon */
+.custom-status-badge {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 10px 15px !important;
+    font-size: 0.85rem !important;
+    font-weight: 700 !important;
+    text-transform: none;
+    border: none;
+    min-height: 38px;
+}
+
+/* Hiệu ứng xoay bánh răng cho trạng thái Đang xử lý */
+.spin {
+    animation: rotate 2s linear infinite;
+    display: inline-block;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Đảm bảo chữ trong badge màu vàng (Warning) dễ đọc hơn */
+.text-warning-dark {
+    color: #856404 !important; /* Màu nâu vàng đậm */
+    background-color: #fff3cd !important;
 }

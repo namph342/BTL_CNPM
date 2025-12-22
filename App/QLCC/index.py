@@ -7,6 +7,7 @@ from QLCC.dao import ReportService, get_danh_sach_phong, get_danh_sach_hop_dong,
     delete_noiquy, add_noiquy, update_gia_tien, get_cauhinh, get_ds_noiquy, get_hopdong_cua_user, \
     get_hoadon_moi_nhat_cua_user, get_lich_su_thanh_toan, search_cu_dan, get_all_logs
 
+
 from QLCC.models import UserRole, UserRole, Canho, Hopdong, Hoadon, User, Chitiethoadon, Suco
 import cloudinary.uploader
 
@@ -205,8 +206,6 @@ def client_hoadon():
     return render_template('client/hoadon_thang.html',
                            invoice=invoice,
                            active_page='client_invoice')
-
-
 @app.route('/client/lich-su')
 @login_required
 def client_lichsu():
@@ -216,11 +215,24 @@ def client_lichsu():
     return render_template('client/lich_su.html',
                            history=history_list,
                            active_page='client_history')
-# @app.route('/client/su-co')
-# def client_suco():
-#     return render_template('client/suco.html', active_page='client_report')
 
-@app.route('/security/')
+@app.route('/client/su-co')
+@login_required
+def client_suco():
+    # Gọi hàm từ dao.py
+    reports = dao.get_suco_by_user(current_user.id)
+    return render_template('client/bao_cao_su_co.html', reports=reports, active_page='client_report')
+
+@app.route('/client/gui-bao-cao', methods=['POST'])
+@login_required
+def client_post_baocao():
+    loai = request.form.get('type')
+    mo_ta = request.form.get('description')
+    # Gọi hàm xử lý từ dao.py
+    dao.add_suco(current_user.id, loai, mo_ta)
+    return redirect(url_for('client_suco'))
+
+@app.route('/security')
 @login_required
 def security_index():
     # Mới vào là nhảy vô soát vé luôn
@@ -249,11 +261,23 @@ def security_nhatky():
                            logs=logs,
                            active_page='sec_logs')
 
+@app.route('/security/su-co')
+@login_required
+def security_suco():
+    # Gọi hàm từ dao.py
+    list_suco = dao.get_all_suco()
+    return render_template('security/tiep_nhan_yeu_cau.html', list_suco=list_suco, active_page='sec_issues')
+
+@app.route('/security/cap-nhat-trang-thai/<int:id>/<string:status>')
+@login_required
+def security_update_suco(id, status):
+    # Gọi hàm xử lý từ dao.py
+    dao.update_suco_status(id, status)
+    return redirect(url_for('security_suco'))
+
 @login_manager.user_loader
 def load_user(user_id):
     return dao.get_user_by_id(user_id)
-
-
 
 if __name__ == "__main__":
     with app.app_context():

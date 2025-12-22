@@ -7,5 +7,60 @@
 {% endblock %}
 
 {% block content %}
+<div class="container mt-4 mb-5" style="max-width: 850px;">
 
+    <div class="card shadow-sm border-0 rounded-4 p-4 mb-5">
+        <h4 class="fw-bold mb-4">Gửi báo cáo sự cố</h4>
+        <form action="{{ url_for('client_post_baocao') }}" method="POST">
+            <div class="mb-3">
+                <label class="form-label fw-bold">Loại sự cố</label>
+                <select name="type" class="form-select" required>
+                    <option value="Sự cố điện nước">Sự cố điện nước</option>
+                    <option value="An ninh - Trật tự">An ninh - Trật tự</option>
+                    <option value="Vệ sinh - Môi trường">Vệ sinh - Môi trường</option>
+                    <option value="Khác">Khác...</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Nội dung sự cố</label>
+                <textarea name="description" class="form-control" rows="5"
+                          placeholder="Bạn đang gặp vấn đề gì? Hãy mô tả chi tiết tại đây..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 py-3 fw-bold rounded-3">Gửi báo cáo ngay</button>
+        </form>
+    </div>
+
+    <h5 class="fw-bold mb-3">Trạng thái xử lý của bạn</h5>
+    {% for sc in reports %}
+    <div class="card shadow-sm border-0 rounded-3 mb-3 p-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <div class="fw-bold text-dark fs-5">{{ sc.name }}</div>
+                <div class="text-secondary small">{{ sc.description }}</div>
+                <div class="mt-2 text-muted" style="font-size: 0.8rem;">
+                    <i class="bi bi-clock"></i> {{ sc.created_date.strftime('%H:%M - %d/%m/%Y') }}
+                </div>
+            </div>
+
+            <div class="text-end" style="min-width: 170px;">
+                {% if sc.status == 'Chờ tiếp nhận' %}
+                    <span class="badge rounded-pill custom-status-badge text-warning-dark">
+                        <i class="bi bi-hourglass-split me-2"></i> Chờ tiếp nhận
+                    </span>
+                {% elif sc.status == 'Đang xử lý' %}
+                    <span class="badge rounded-pill custom-status-badge bg-primary text-white">
+                        <i class="bi bi-gear-fill spin me-2"></i> Đang xử lý
+                    </span>
+                {% else %}
+                    <span class="badge rounded-pill custom-status-badge bg-success text-white">
+                        <i class="bi bi-check-circle-fill me-2"></i> Đã xử lý xong
+                    </span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 {% endblock %}

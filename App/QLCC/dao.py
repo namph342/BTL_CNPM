@@ -5,7 +5,7 @@ from datetime import timedelta, datetime
 from sqlalchemy import func
 
 from QLCC import app, db
-from QLCC.models import Canho, User, Hopdong, Hoadon, Chitiethoadon, UserRole, NoiQuy, CauHinh, NhatKy
+from QLCC.models import Canho, User, Hopdong, Hoadon, Chitiethoadon, UserRole, NoiQuy, CauHinh, NhatKy, Suco
 
 
 def load_apartment_details():
@@ -405,6 +405,31 @@ def search_cu_dan(kw=None):
 
 def get_all_logs():
     return NhatKy.query.order_by(NhatKy.id.desc()).all()
+
+def add_suco(user_id, loai, mo_ta):
+    new_sc = Suco(
+        name=loai,
+        description=mo_ta,
+        status="Chờ tiếp nhận",
+        client_id=user_id
+    )
+    db.session.add(new_sc)
+    db.session.commit()
+
+# Khách xem danh sách của mình
+def get_suco_by_user(user_id):
+    return Suco.query.filter_by(client_id=user_id).order_by(Suco.id.desc()).all()
+
+# Bảo vệ xem tất cả
+def get_all_suco():
+    return Suco.query.order_by(Suco.id.desc()).all()
+
+# Bảo vệ cập nhật trạng thái
+def update_suco_status(id, status):
+    sc = Suco.query.get(id)
+    if sc:
+        sc.status = status
+        db.session.commit()
 
 if __name__ == "__main__":
     with app.app_context():
